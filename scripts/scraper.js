@@ -31,7 +31,10 @@ class Scraper {
                 return this.$(element).text().trim();
             }).get().join(' /');
 
-            const skillIcon = this.$(skill).find('image').attr('href');
+            // Accedo al atributo href del elemento image, hago split por / y obtengo el último elemento
+            // que es el nombre del archivo del icono
+            const skillIcon = this.$(skill).find('image').attr('href').split('/').pop();
+
             skills.push({
                 id: skillId,
                 text: skillText,
@@ -43,10 +46,12 @@ class Scraper {
     }
 }
 
+// TODO: Remove this, is for testing purposes only
 (async () => {
     const scraper = new Scraper('https://tinkererway.dev/web_skill_trees/electronics_skill_tree');
     await scraper.fetchData();
     const skills = scraper.retrieveSkills()
     console.log(skills);
 })()
+
 module.exports = Scraper;
