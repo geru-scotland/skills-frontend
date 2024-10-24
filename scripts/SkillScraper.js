@@ -1,28 +1,16 @@
-const cheerio = require('cheerio');
+const Scrapper = require('./Scraper');
 
-class Scraper {
-
+class SkillScraper extends Scrapper {
     constructor(url){
-        this.url = url;
-        this.$ = null;
+        super(url);
+        this.skills = [];
     }
 
-    async fetchData(){
-        try {
-            this.$ = null;
-            const response = await fetch(this.url);
-            const html = await response.text();
-            this.$ = cheerio.load(html);
-        } catch (error) {
-            console.error('Error fetching data: ', error);
-        }
-    }
-
-    retrieveSkills() {
+    parseSkills() {
         if (!this.$) {
             return 'No data loaded yet';
         }
-        const skills = [];
+
         const svgWrappers = this.$('.svg-container').find('.svg-wrapper');
         svgWrappers.each((index, skill) => {
             const skillId = this.$(skill).attr('data-id');
@@ -35,23 +23,22 @@ class Scraper {
             // que es el nombre del archivo del icono
             const skillIcon = this.$(skill).find('image').attr('href').split('/').pop();
 
-            skills.push({
+            this.skills.push({
                 id: skillId,
                 text: skillText,
                 icon: skillIcon
             });
         });
-
-        return skills
+        return this.skills;
     }
 }
 
 // TODO: Remove this, is for testing purposes only
 (async () => {
-    const scraper = new Scraper('https://tinkererway.dev/web_skill_trees/electronics_skill_tree');
+    const scraper = new SkillScraper('https://tinkererway.dev/web_skill_trees/electronics_skill_tree');
     await scraper.fetchData();
-    const skills = scraper.retrieveSkills()
+    const skills = scraper.parseSkills()
     console.log(skills);
 })()
 
-module.exports = Scraper;
+module.exports = SkillScraper;
