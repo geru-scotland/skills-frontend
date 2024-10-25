@@ -1,3 +1,4 @@
+const fs = require('fs');
 const Scrapper = require('./Scraper');
 const configMap = require('../config/config')
 
@@ -47,13 +48,25 @@ class SkillScraper extends Scrapper {
             return icons;
         }, [])
     }
+
+    exportSkillsToJSON() {
+        const filePath = "../" + configMap.skills_json_path;
+        fs.writeFile(filePath, JSON.stringify(this.skills, null, 2), 'utf8', (err) => {
+            if (err) {
+                console.log("Error writing skills to JSON file:", err);
+            } else {
+                console.log("Skills successfully exported to JSON file at:", filePath);
+            }
+        });
+    }
 }
 
 // TODO: Remove this, is for testing purposes only
 (async () => {
     const scraper = new SkillScraper(configMap.skill_endpoint);
     await scraper.init();
-    const skills = scraper.harvestSkills()
+    scraper.harvestSkills();
+    scraper.exportSkillsToJSON();
 })()
 
 module.exports = SkillScraper;
