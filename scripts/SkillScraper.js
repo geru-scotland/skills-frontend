@@ -1,13 +1,17 @@
 const Scrapper = require('./Scraper');
+const configMap = require('../config/config')
 
 class SkillScraper extends Scrapper {
-    constructor(url){
-        super(url);
+    constructor(endpoint){
+        super(endpoint);
         this.skills = [];
     }
 
-    harvestSkills() {
+    async init() {
+        await super.fetchData()
+    }
 
+    harvestSkills() {
         if (!this.$) {
             return 'No data loaded yet';
         }
@@ -35,17 +39,21 @@ class SkillScraper extends Scrapper {
                 console.log("Error when trying to harvest skills")
             }
         });
-        
-        return this.skills;
+    }
+
+    getIconsFromSkills() {
+        return this.skills.reduce( (icons, skill) => {
+            icons.push(skill.icon)
+            return icons;
+        }, [])
     }
 }
 
 // TODO: Remove this, is for testing purposes only
 (async () => {
-    const scraper = new SkillScraper('https://tinkererway.dev/web_skill_trees/electronics_skill_tree');
-    await scraper.fetchData();
+    const scraper = new SkillScraper(configMap.skill_endpoint);
+    await scraper.init();
     const skills = scraper.harvestSkills()
-    console.log(skills);
 })()
 
 module.exports = SkillScraper;
