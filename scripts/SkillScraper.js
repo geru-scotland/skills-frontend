@@ -6,29 +6,36 @@ class SkillScraper extends Scrapper {
         this.skills = [];
     }
 
-    parseSkills() {
+    harvestSkills() {
+
         if (!this.$) {
             return 'No data loaded yet';
         }
 
         const svgWrappers = this.$('.svg-container').find('.svg-wrapper');
+
         svgWrappers.each((index, skill) => {
-            const skillId = this.$(skill).attr('data-id');
+            try{
+                const skillId = this.$(skill).attr('data-id');
 
-            const skillText = this.$(skill).find('text').find('tspan').map((index, element) => {
-                return this.$(element).text().trim();
-            }).get().join(' /');
+                const skillText = this.$(skill).find('text').find('tspan').map((index, element) => {
+                    return this.$(element).text().trim();
+                }).get().join(' /');
 
-            // Accedo al atributo href del elemento image, hago split por / y obtengo el último elemento
-            // que es el nombre del archivo del icono
-            const skillIcon = this.$(skill).find('image').attr('href').split('/').pop();
+                // Accedo al atributo href del elemento image, hago split por / y obtengo el último elemento
+                // que es el nombre del archivo del icono
+                const skillIcon = this.$(skill).find('image').attr('href').split('/').pop();
 
-            this.skills.push({
-                id: skillId,
-                text: skillText,
-                icon: skillIcon
-            });
+                this.skills.push({
+                    id: skillId,
+                    text: skillText,
+                    icon: skillIcon
+                });
+            } catch (error) {
+                console.log("Error when trying to harvest skills")
+            }
         });
+        
         return this.skills;
     }
 }
@@ -37,7 +44,7 @@ class SkillScraper extends Scrapper {
 (async () => {
     const scraper = new SkillScraper('https://tinkererway.dev/web_skill_trees/electronics_skill_tree');
     await scraper.fetchData();
-    const skills = scraper.parseSkills()
+    const skills = scraper.harvestSkills()
     console.log(skills);
 })()
 
