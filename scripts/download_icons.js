@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const SkillScraper = require("./SkillScraper")
 const configMap = require('../config/config')
 
@@ -22,16 +24,54 @@ class ImageHarvester {
         this.scraper[this.harvestData]()
     }
 
-    harvestImages(getData) {
-        const data = this.scraper[getData]();
-        data.forEach( (iconName) => {
+    // Secuencial por ahora
+    async downloadImage(url, filename) {
+        const fetch = await import('node-fetch');
+        await fetch.default(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch ${url}: ${response.statusText}`);
+                }
+                const fileStream = fs.createWriteStream(filename);
+                response.body.pipe(fileStream);
+                response.body.on("error", (error) => {
+                    throw new Error(error)
+                });
+            })
+            .catch(error => {
+                throw new Error(error)
+            });
+    }
+
+    // TODO: Hacer debidamente el tema de rutas, esto es una chapuza.
+    // Considerar si node path o similar, pero con vanila js no hay mucho
+    // quizá module alias de node.
+    async harvestImages(getData, storePath) {
+        this.harvestData = this.scraper[getData]();
+        const downloadDir = path.join(__dirname, "../"+storePath);
+        let downloadedImages = 0;
+
+        if (!fs.existsSync(downloadDir)) {
+            fs.mkdirSync(downloadDir, { recursive: true });
+        }
+
+        for (const iconName of this.harvestData) {
             try {
                 const url = `${this.endpoint}/${iconName}`;
-                console.log(`Downloading ${url}`)
+                const filePath = path.join(downloadDir, iconName);
+                console.log(`Downloading ${url}`);
+                await this.downloadImage(url, filePath);
+                console.log("Success!")
+                downloadedImages++;
             } catch (error) {
                 console.log("There was an error downloading " + iconName + ": " + error.error);
             }
-        })
+        }
+
+        if(downloadedImages === this.harvestData.length)
+            console.log("Every image has been downloaded.")
+        else
+            console.log(`Images downloaded: ${downloadedImages}/${this.harvestData.length}`)
     }
 }
 
@@ -40,5 +80,5 @@ imageHarvester.setupScraper(SkillScraper, "harvestSkills", configMap.skill_endpo
 
 (async () => {
     await imageHarvester.init();
-    imageHarvester.harvestImages("getIconsFromSkills");
+    await imageHarvester.harvestImages("getIconsFromSkills", configMap.icon_path);
 })();
