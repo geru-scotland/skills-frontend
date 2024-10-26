@@ -1,6 +1,6 @@
 const fs = require('fs');
 const Scrapper = require('./Scraper');
-const configMap = require('../config/config')
+const configMap = require('../../config/config')
 
 class SkillScraper extends Scrapper {
     constructor(endpoint){
@@ -43,10 +43,7 @@ class SkillScraper extends Scrapper {
     }
 
     getIconsFromSkills() {
-        return this.skills.reduce( (icons, skill) => {
-            icons.push(skill.icon)
-            return icons;
-        }, [])
+        return this.skills.map(skill => skill.icon);
     }
 
     exportSkillsToJSON() {
