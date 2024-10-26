@@ -58,12 +58,4 @@ class SkillScraper extends Scrapper {
     }
 }
 
-// TODO: Remove this, is for testing purposes only
-(async () => {
-    const scraper = new SkillScraper(configMap.skill_endpoint);
-    await scraper.init();
-    scraper.harvestSkills();
-    scraper.exportSkillsToJSON();
-})()
-
 module.exports = SkillScraper;
