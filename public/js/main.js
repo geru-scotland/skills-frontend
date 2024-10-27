@@ -8,11 +8,6 @@ function buildSkills(skillsData) {
     const svgContainer = document.querySelector('.svg-container');
     svgContainer.innerHTML = skillsData.map(skill => createSkillSVG(skill)).join('');
 
-    document.querySelectorAll(".book-icon").forEach(bookIcon => {
-        bookIcon.addEventListener("click", () => {
-            window.location.href = "template.html";
-        });
-    });
 }
 
 function createSkillSVG(skill) {
@@ -30,7 +25,9 @@ function createSkillSVG(skill) {
             <div class="icon-overlay">
             <!-- Iconos de lapiz y cuaderno, unitilizo font awesome simplemente, con js -->
                 <i class="fas fa-pencil-alt"></i>
-                <i class="fas fa-book book-icon" ></i>                
+                <a href="skill-template.html?id=${skill.id}">
+                    <i class="fas fa-book book-icon"></i>
+                </a>       
             </div>
         </div>
     `;

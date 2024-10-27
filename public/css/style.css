@@ -44,18 +44,22 @@ h1 {
   gap: 20px;
 }
 
+.icon-overlay a {
+  position: absolute;
+}
+
 .icon-overlay i {
   font-size: 1.5em;
   color: #333;
   position: absolute;
 }
 
-.icon-overlay i:first-child {
+.icon-overlay .fa-pencil-alt{
   left: -50px;
   top: 10px;
 }
 
-.icon-overlay i:last-child {
+.icon-overlay .book-icon {
   right: -50px;
   top: 10px;
 }
