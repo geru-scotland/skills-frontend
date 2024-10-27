@@ -75,3 +75,74 @@ body {
     background-color: #45a049;
 }
 
+.evidence-section {
+    margin-top: 20px;
+    padding: 16px;
+    background-color: #fdfdfd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.evidence-section h2 {
+    font-size: 1.5em;
+    color: #333;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+}
+
+.evidence-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.evidence-table th, .evidence-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 1em;
+}
+
+.evidence-table th {
+    background-color: #ddd;
+    color: #000;
+    font-weight: bold;
+}
+
+.evidence-table td a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.evidence-table td a:hover {
+    text-decoration: underline;
+}
+
+.approve-btn, .reject-btn {
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 0.9em;
+    cursor: pointer;
+    color: #fff;
+    transition: background-color 0.3s ease;
+    margin-right: 4px;
+}
+
+.approve-btn {
+    background-color: #28a745;
+}
+
+.approve-btn:hover {
+    background-color: #218838;
+}
+
+.reject-btn {
+    background-color: #dc3545;
+}
+
+.reject-btn:hover {
+    background-color: #c82333;
+}
+

@@ -1,5 +1,7 @@
 import skillsData from '../data/skills.js';
 
+const unverifiedEvidences = [];
+
 function getSkillById(skillId) {
     return skillsData.find(skill => skill.id === skillId);
 }
@@ -56,7 +58,67 @@ function renderSkillTemplate() {
         <ul class="resources-list">
             ${resources.map(resource => `<li><a href="${resource.url}">${resource.name}</a></li>`).join('')}
         </ul>
+        <h2>Unverified Evidence Submissions</h2>
+        <table id="evidenceTable" class="evidence-table">
+            <tr>
+                <th>User</th>
+                <th>Evidence</th>
+                <th>Actions</th>
+            </tr>
+        </table>
     `;
+    document.getElementById('evidenceForm').addEventListener('submit', handleEvidenceSubmit);
+}
+
+function handleEvidenceSubmit(event) {
+    // para que no se muera :( 
+    event.preventDefault();
+    
+    const evidenceInput = event.target.elements.evidence.value;
+
+    const newEvidence = { user: "Admin", evidence: evidenceInput };
+    unverifiedEvidences.push(newEvidence);
+
+    renderEvidenceTable();
+
+    event.target.reset();
+}
+
+function renderEvidenceTable() {
+    const evidenceTable = document.getElementById('evidenceTable');
+
+    evidenceTable.innerHTML = `
+        <tr>
+            <th>User</th>
+            <th>Evidence</th>
+            <th>Actions</th>
+        </tr>
+    `;
+
+    unverifiedEvidences.forEach((evidence, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${evidence.user}</td>
+            <td><a href="${evidence.evidence}" target="_blank">${evidence.evidence}</a></td>
+            <td>
+                <button onclick="approveEvidence(${index})" class="approve-btn">Approve</button>
+                <button onclick="rejectEvidence(${index})" class="reject-btn">Reject</button>
+            </td>
+        `;
+        evidenceTable.appendChild(row);
+    });
+}
+
+function approveEvidence(index) {
+    unverifiedEvidences.splice(index, 1);
+    renderEvidenceTable();
+    alert('Evidence approved!');
+}
+
+function rejectEvidence(index) {
+    unverifiedEvidences.splice(index, 1);
+    renderEvidenceTable();
+    alert('Evidence rejected!');
 }
 
 document.addEventListener("DOMContentLoaded", renderSkillTemplate);
