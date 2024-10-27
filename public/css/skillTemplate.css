@@ -1,0 +1,98 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    max-width: 600px;
+    background: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.skill-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.icon-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.icon-placeholder {
+    width: 60px;
+    height: 60px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #666;
+}
+
+.skill-score {
+    font-size: 16px;
+    color: #666;
+}
+
+.description, .tasks, .resources {
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.description p {
+    font-size: 16px;
+    color: #333;
+    line-height: 1.5;
+}
+
+.tasks ul, .resources ul {
+    list-style: none;
+}
+
+.tasks li, .resources li {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.resources a {
+    color: #1a73e8;
+    text-decoration: none;
+}
+
+.resources a:hover {
+    text-decoration: underline;
+}
