@@ -3,48 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skill Template</title>
+    <title>Skill Page Template</title>
     <link rel="stylesheet" href="skillTemplate.css">
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1 class="skill-title">Skill: [Nombre de la Competencia]</h1>
-        </header>
-        
-        <section class="icon-section">
-            <div class="icon-placeholder">
-                <!-- Aquí va el ícono de la competencia -->
-                <p>[Icono]</p>
-            </div>
-            <div class="skill-score">Skill Score: [Puntuación]</div>
-        </section>
+        <h1 class="skill-title">Skill: [Título de la competencia]</h1>
+        <div class="skill-icon">
+            <!-- Icono de la competencia -->
+            <img src="path/to/icon.png" alt="Skill Icon" width="100">
+        </div>
+        <p class="skill-description">[Breve descripción de la competencia]</p>
 
-        <section class="description">
-            <h2>Descripción</h2>
-            <p>[Breve descripción de la competencia]</p>
-        </section>
+        <h2>Tasks to Complete</h2>
+        <ul class="task-list">
+            <li><label><input type="checkbox"> Task 1</label></li>
+            <li><label><input type="checkbox"> Task 2</label></li>
+            <li><label><input type="checkbox"> Task 3</label></li>
+            <!-- Agrega más tareas según sea necesario -->
+        </ul>
 
-        <section class="tasks">
-            <h2>Tareas a Completar</h2>
-            <ul>
-                <li><input type="checkbox"> [Tarea 1]</li>
-                <li><input type="checkbox"> [Tarea 2]</li>
-                <li><input type="checkbox"> [Tarea 3]</li>
-                <li><input type="checkbox"> [Tarea 4]</li>
-                <li><input type="checkbox"> [Tarea 5]</li>
-            </ul>
-        </section>
+        <h2>Provide Evidence</h2>
+        <form id="evidenceForm" class="evidence-form">
+            <textarea name="evidence" placeholder="Enter a URL or explanation as evidence for completing this skill" required></textarea>
+            <button type="submit" class="submit-btn">Submit Evidence</button>
+        </form>
 
-        <section class="resources">
-            <h2>Recursos</h2>
-            <ul>
-                <li><a href="#">[Recurso 1]</a></li>
-                <li><a href="#">[Recurso 2]</a></li>
-                <li><a href="#">[Recurso 3]</a></li>
-                <li><a href="#">[Recurso 4]</a></li>
-            </ul>
-        </section>
+        <h2>Resources</h2>
+        <ul class="resources-list">
+            <li><a href="URL1">Resource 1</a></li>
+            <li><a href="URL2">Resource 2</a></li>
+            <li><a href="URL3">Resource 3</a></li>
+            <!-- Agrega más recursos según sea necesario -->
+        </ul>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="js/conffeti.js"></script>
 </body>
 </html>
