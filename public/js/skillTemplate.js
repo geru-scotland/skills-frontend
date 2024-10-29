@@ -1,6 +1,6 @@
 import skillsData from '../data/skills.js';
 
-const unverifiedEvidences = [];
+const skillEvidences = {};
 
 function getSkillById(skillId) {
     return skillsData.find(skill => skill.id === skillId);
@@ -22,14 +22,12 @@ function renderSkillTemplate() {
         return;
     }
 
-    // Hardcodeo esto hasta que tengamos datos
     const tasks = [
         "Task 1",
         "Task 2",
         "Task 3"
     ];
 
-    // Y esto también
     const resources = [
         { url: "URL1", name: "Resource 1" },
         { url: "URL2", name: "Resource 2" },
@@ -67,24 +65,33 @@ function renderSkillTemplate() {
             </tr>
         </table>
     `;
+
     document.getElementById('evidenceForm').addEventListener('submit', handleEvidenceSubmit);
+
+    if (!skillEvidences[id]) {
+        skillEvidences[id] = [];
+    }
+    renderEvidenceTable(id);
 }
 
 function handleEvidenceSubmit(event) {
-    // para que no se muera :( 
     event.preventDefault();
-    
+
+    const { id } = getQueryParams();
     const evidenceInput = event.target.elements.evidence.value;
-
     const newEvidence = { user: "Admin", evidence: evidenceInput };
-    unverifiedEvidences.push(newEvidence);
 
-    renderEvidenceTable();
+    if (!skillEvidences[id]) {
+        skillEvidences[id] = [];
+    }
+    skillEvidences[id].push(newEvidence);
+
+    renderEvidenceTable(id);
 
     event.target.reset();
 }
 
-function renderEvidenceTable() {
+function renderEvidenceTable(skillId) {
     const evidenceTable = document.getElementById('evidenceTable');
 
     evidenceTable.innerHTML = `
@@ -95,29 +102,29 @@ function renderEvidenceTable() {
         </tr>
     `;
 
-    unverifiedEvidences.forEach((evidence, index) => {
+    (skillEvidences[skillId] || []).forEach((evidence, index) => {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${evidence.user}</td>
             <td><a href="${evidence.evidence}" target="_blank">${evidence.evidence}</a></td>
             <td>
-                <button onclick="approveEvidence(${index})" class="approve-btn">Approve</button>
-                <button onclick="rejectEvidence(${index})" class="reject-btn">Reject</button>
+                <button onclick="approveEvidence(${skillId}, ${index})" class="approve-btn">Approve</button>
+                <button onclick="rejectEvidence(${skillId}, ${index})" class="reject-btn">Reject</button>
             </td>
         `;
         evidenceTable.appendChild(row);
     });
 }
 
-function approveEvidence(index) {
-    unverifiedEvidences.splice(index, 1);
-    renderEvidenceTable();
+function approveEvidence(skillId, index) {
+    skillEvidences[skillId].splice(index, 1);
+    renderEvidenceTable(skillId);
     alert('Evidence approved!');
 }
 
-function rejectEvidence(index) {
-    unverifiedEvidences.splice(index, 1);
-    renderEvidenceTable();
+function rejectEvidence(skillId, index) {
+    skillEvidences[skillId].splice(index, 1);
+    renderEvidenceTable(skillId);
     alert('Evidence rejected!');
 }
 

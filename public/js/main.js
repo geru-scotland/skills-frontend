@@ -11,6 +11,9 @@ function buildSkills(skillsData) {
 }
 
 function createSkillSVG(skill) {
+
+    const unverifiedCount = localStorage.getItem('unverifiedEvidenceCount') || 0;
+
     // Hago un "React-like", jaja
     // Devuelvo el svg a modo de "componente" (más o menos...)
     return `
@@ -21,6 +24,10 @@ function createSkillSVG(skill) {
                     ${skill.text.split(' /').map(line => `<tspan x="50%" dy="1.2em" font-weight="bold">${line}</tspan>`).join('')}
                 </text>
                 <image x="35%" y="60%" width="30" height="30" href="electronics/icons/${skill.icon}" />
+                ${skill.unverifiedCount > 0 ? `
+                    <circle cx="10" cy="10" r="10" fill="red"></circle>
+                    <text x="10" y="15" text-anchor="middle" fill="white" font-size="10">${skill.unverifiedCount}</text>
+                ` : ''}
             </svg>
             <div class="icon-overlay">
             <!-- Iconos de lapiz y cuaderno, unitilizo font awesome simplemente, con js -->
