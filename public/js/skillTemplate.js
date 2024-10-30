@@ -1,6 +1,6 @@
 import skillsData from '../data/skills.js';
 
-const skillEvidences = {};
+const unverifiedEvidences = JSON.parse(localStorage.getItem('unverifiedEvidences')) || {};
 
 function getSkillById(skillId) {
     return skillsData.find(skill => skill.id === skillId);
@@ -68,9 +68,6 @@ function renderSkillTemplate() {
 
     document.getElementById('evidenceForm').addEventListener('submit', handleEvidenceSubmit);
 
-    if (!skillEvidences[id]) {
-        skillEvidences[id] = [];
-    }
     renderEvidenceTable(id);
 }
 
@@ -81,10 +78,12 @@ function handleEvidenceSubmit(event) {
     const evidenceInput = event.target.elements.evidence.value;
     const newEvidence = { user: "Admin", evidence: evidenceInput };
 
-    if (!skillEvidences[id]) {
-        skillEvidences[id] = [];
+    if (!unverifiedEvidences[id]) {
+        unverifiedEvidences[id] = [];
     }
-    skillEvidences[id].push(newEvidence);
+    unverifiedEvidences[id].push(newEvidence);
+
+    localStorage.setItem('unverifiedEvidences', JSON.stringify(unverifiedEvidences));
 
     renderEvidenceTable(id);
 
@@ -102,7 +101,7 @@ function renderEvidenceTable(skillId) {
         </tr>
     `;
 
-    (skillEvidences[skillId] || []).forEach((evidence, index) => {
+    (unverifiedEvidences[skillId] || []).forEach((evidence, index) => {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${evidence.user}</td>
@@ -116,14 +115,14 @@ function renderEvidenceTable(skillId) {
     });
 }
 
-function approveEvidence(skillId, index) {
-    skillEvidences[skillId].splice(index, 1);
+window.approveEvidence = function(skillId, index) {
+    unverifiedEvidences[skillId].splice(index, 1);
     renderEvidenceTable(skillId);
     alert('Evidence approved!');
 }
 
-function rejectEvidence(skillId, index) {
-    skillEvidences[skillId].splice(index, 1);
+window.rejectEvidence = function(skillId, index) {
+    unverifiedEvidences[skillId].splice(index, 1);
     renderEvidenceTable(skillId);
     alert('Evidence rejected!');
 }

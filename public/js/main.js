@@ -1,5 +1,7 @@
 import skillsData from '../data/skills.js';
 
+const unverifiedEvidences = JSON.parse(localStorage.getItem('unverifiedEvidences')) || {};
+
 document.addEventListener("DOMContentLoaded", () => {
     buildSkills(skillsData);
 });
@@ -12,7 +14,7 @@ function buildSkills(skillsData) {
 
 function createSkillSVG(skill) {
 
-    const unverifiedCount = localStorage.getItem('unverifiedEvidenceCount') || 0;
+    const unverifiedCount = unverifiedEvidences[skill.id]?.length || 0;
 
     // Hago un "React-like", jaja
     // Devuelvo el svg a modo de "componente" (más o menos...)
@@ -24,9 +26,9 @@ function createSkillSVG(skill) {
                     ${skill.text.split(' /').map(line => `<tspan x="50%" dy="1.2em" font-weight="bold">${line}</tspan>`).join('')}
                 </text>
                 <image x="35%" y="60%" width="30" height="30" href="electronics/icons/${skill.icon}" />
-                ${skill.unverifiedCount > 0 ? `
+                ${unverifiedCount > 0 ? `
                     <circle cx="10" cy="10" r="10" fill="red"></circle>
-                    <text x="10" y="15" text-anchor="middle" fill="white" font-size="10">${skill.unverifiedCount}</text>
+                    <text x="10" y="15" text-anchor="middle" fill="white" font-size="10">${unverifiedCount}</text>
                 ` : ''}
             </svg>
             <div class="icon-overlay">
