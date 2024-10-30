@@ -1,6 +1,8 @@
 import skillsData from '../data/skills.js';
 
 const unverifiedEvidences = JSON.parse(localStorage.getItem('unverifiedEvidences')) || {};
+const taskStates = JSON.parse(localStorage.getItem('taskStates')) || {};
+
 
 function getSkillById(skillId) {
     return skillsData.find(skill => skill.id === skillId);
@@ -66,9 +68,15 @@ function renderSkillTemplate() {
         </table>
     `;
 
+    const taskCheckboxes = document.querySelectorAll('.task-checkbox');
+    taskCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', handleTaskChange);
+    });
+
     document.getElementById('evidenceForm').addEventListener('submit', handleEvidenceSubmit);
 
     renderEvidenceTable(id);
+    updateHexagonColor(id);
 }
 
 function handleEvidenceSubmit(event) {
@@ -113,6 +121,14 @@ function renderEvidenceTable(skillId) {
         `;
         evidenceTable.appendChild(row);
     });
+}
+
+function checkTasksCompletion(skill) {
+    const checkboxes = document.querySelectorAll('.task-checkbox');
+    const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+    if (allChecked) {
+        hexagon.setAttribute("fill", "green");
+    }
 }
 
 window.approveEvidence = function(skillId, index) {
