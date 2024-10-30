@@ -117,12 +117,14 @@ function renderEvidenceTable(skillId) {
 
 window.approveEvidence = function(skillId, index) {
     unverifiedEvidences[skillId].splice(index, 1);
+    localStorage.setItem('unverifiedEvidences', JSON.stringify(unverifiedEvidences));
     renderEvidenceTable(skillId);
     alert('Evidence approved!');
 }
 
 window.rejectEvidence = function(skillId, index) {
     unverifiedEvidences[skillId].splice(index, 1);
+    localStorage.setItem('unverifiedEvidences', JSON.stringify(unverifiedEvidences));
     renderEvidenceTable(skillId);
     alert('Evidence rejected!');
 }
