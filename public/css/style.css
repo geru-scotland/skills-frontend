@@ -29,12 +29,18 @@ h1 {
     transform: scale(1.2);
 }
 
-.hexagon {
+.hexagon.white {
     fill: white;
-    stroke: black;
-    stroke-width: 1px;
-    
 }
+
+.hexagon.green {
+    fill: lightgreen;
+}
+
+.hexagon.default {
+    fill: white; /* Cambia esto al color por defecto deseado */
+}
+
 
 .icon-overlay {
     display: none;

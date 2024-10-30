@@ -12,12 +12,18 @@ function applyHexagonColors() {
     
     skillIds.forEach(skillId => {
         const hexagon = document.querySelector(`.svg-wrapper[data-id="${skillId}"] .hexagon`);
-        const color = localStorage.getItem(`hexagonColor-${skillId}`);
-        if (hexagon && color) {
-            hexagon.setAttribute("fill", color);
+        const color = localStorage.getItem(`hexagonColor-${skillId}`) || "white"; // Color por defecto
+
+        if (hexagon) {
+            hexagon.classList.remove('white', 'green'); // Elimina clases antiguas
+            if (color === "green") {
+                hexagon.classList.add('green'); // Agrega clase verde
+            } else {
+                hexagon.classList.add('white'); // Agrega clase blanca
+            }
         }
     });
-}
+}git add
 
 function buildSkills(skillsData) {
     const svgContainer = document.querySelector('.svg-container');
