@@ -1,6 +1,7 @@
 import skillsData from '../data/skills.js';
 
-const unverifiedEvidences = [];
+const unverifiedEvidences = JSON.parse(localStorage.getItem('unverifiedEvidences')) || {};
+const taskStates = JSON.parse(localStorage.getItem('taskStates')) || {};
 
 function getSkillById(skillId) {
     return skillsData.find(skill => skill.id === skillId);
@@ -22,14 +23,12 @@ function renderSkillTemplate() {
         return;
     }
 
-    // Hardcodeo esto hasta que tengamos datos
     const tasks = [
         "Task 1",
         "Task 2",
         "Task 3"
     ];
 
-    // Y esto también
     const resources = [
         { url: "URL1", name: "Resource 1" },
         { url: "URL2", name: "Resource 2" },
@@ -47,7 +46,12 @@ function renderSkillTemplate() {
         <p class="skill-description">${skill.description}</p>
         <h2>Tasks to Complete</h2>
         <ul class="task-list">
-            ${tasks.map(task => `<li><label><input type="checkbox"> ${task}</label></li>`).join('')}
+            ${tasks.map((task, index) => `
+                <li>
+                    <label>
+                        <input type="checkbox" class="task-checkbox" data-task-index="${index}" ${taskStates[id] && taskStates[id][index] ? 'checked' : ''}>                         ${task}
+                    </label>
+                </li>`).join('')}
         </ul>
         <h2>Provide Evidence</h2>
         <form id="evidenceForm" class="evidence-form">
@@ -67,24 +71,68 @@ function renderSkillTemplate() {
             </tr>
         </table>
     `;
+
+    const taskCheckboxes = document.querySelectorAll('.task-checkbox');
+    taskCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', handleTaskChange);
+    });
+
     document.getElementById('evidenceForm').addEventListener('submit', handleEvidenceSubmit);
+
+    renderEvidenceTable(id);
+    updateHexagonColor(id);
 }
 
-function handleEvidenceSubmit(event) {
-    // para que no se muera :( 
-    event.preventDefault();
+function handleTaskChange(event) {
+    const { id } = getQueryParams();
+    const taskIndex = event.target.getAttribute('data-task-index');
+
+    if (!taskStates[id]) {
+        taskStates[id] = [];
+    }
+
+    taskStates[id][taskIndex] = event.target.checked;
+
+    localStorage.setItem('taskStates', JSON.stringify(taskStates));
     
+    updateHexagonColor(id);
+}
+
+function updateHexagonColor(skillId) {
+    const checkboxes = document.querySelectorAll('.task-checkbox');
+    const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+
+    const approvedEvidences = JSON.parse(localStorage.getItem('approvedEvidences')) || {};
+    const hasApprovedEvidence = approvedEvidences[skillId] && approvedEvidences[skillId].length > 0;
+
+    if (allChecked && hasApprovedEvidence) {
+        localStorage.setItem(`hexagonColor-${skillId}`, "green");
+    } else {
+        localStorage.setItem(`hexagonColor-${skillId}`, "white");
+    }
+}
+
+
+function handleEvidenceSubmit(event) {
+    event.preventDefault();
+
+    const { id } = getQueryParams();
     const evidenceInput = event.target.elements.evidence.value;
-
     const newEvidence = { user: "Admin", evidence: evidenceInput };
-    unverifiedEvidences.push(newEvidence);
 
-    renderEvidenceTable();
+    if (!unverifiedEvidences[id]) {
+        unverifiedEvidences[id] = [];
+    }
+    unverifiedEvidences[id].push(newEvidence);
+
+    localStorage.setItem('unverifiedEvidences', JSON.stringify(unverifiedEvidences));
+
+    renderEvidenceTable(id);
 
     event.target.reset();
 }
 
-function renderEvidenceTable() {
+function renderEvidenceTable(skillId) {
     const evidenceTable = document.getElementById('evidenceTable');
 
     evidenceTable.innerHTML = `
@@ -95,29 +143,43 @@ function renderEvidenceTable() {
         </tr>
     `;
 
-    unverifiedEvidences.forEach((evidence, index) => {
+    (unverifiedEvidences[skillId] || []).forEach((evidence, index) => {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${evidence.user}</td>
             <td><a href="${evidence.evidence}" target="_blank">${evidence.evidence}</a></td>
             <td>
-                <button onclick="approveEvidence(${index})" class="approve-btn">Approve</button>
-                <button onclick="rejectEvidence(${index})" class="reject-btn">Reject</button>
+                <button onclick="approveEvidence(${skillId}, ${index})" class="approve-btn">Approve</button>
+                <button onclick="rejectEvidence(${skillId}, ${index})" class="reject-btn">Reject</button>
             </td>
         `;
         evidenceTable.appendChild(row);
     });
 }
 
-function approveEvidence(index) {
-    unverifiedEvidences.splice(index, 1);
-    renderEvidenceTable();
+
+window.approveEvidence = function(skillId, index) {
+    const approvedEvidences = JSON.parse(localStorage.getItem('approvedEvidences')) || {};
+
+    if (!approvedEvidences[skillId]) {
+        approvedEvidences[skillId] = [];
+    }
+
+    approvedEvidences[skillId].push(unverifiedEvidences[skillId][index]);
+    
+    unverifiedEvidences[skillId].splice(index, 1);
+    localStorage.setItem('unverifiedEvidences', JSON.stringify(unverifiedEvidences));
+    localStorage.setItem('approvedEvidences', JSON.stringify(approvedEvidences));
+
+    renderEvidenceTable(skillId);
+    updateHexagonColor(skillId);
     alert('Evidence approved!');
 }
 
-function rejectEvidence(index) {
-    unverifiedEvidences.splice(index, 1);
-    renderEvidenceTable();
+window.rejectEvidence = function(skillId, index) {
+    unverifiedEvidences[skillId].splice(index, 1);
+    localStorage.setItem('unverifiedEvidences', JSON.stringify(unverifiedEvidences));
+    renderEvidenceTable(skillId);
     alert('Evidence rejected!');
 }
 

@@ -1,146 +1,170 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: #f0f0f0;
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    background-color: #f0f0f0;
 }
 
 h1 {
-  text-align: center;
-  font-size: 2em;
-  margin-bottom: 20px;
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 20px;
 }
 
 .svg-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
 }
 
 .svg-wrapper {
-  width: 100px;
-  height: 100px;
-  cursor: pointer;
-  position: relative;
-  transition: transform 0.3s ease;
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.3s ease;
 }
 
 .svg-wrapper:hover {
-  transform: scale(1.2);
+    transform: scale(1.2);
 }
 
-.hexagon {
-  fill: white;
-  stroke: black;
-  stroke-width: 1px;
+.hexagon.white {
+    fill: white;
 }
+
+.hexagon.green {
+    fill: lightgreen;
+}
+
+.hexagon.default {
+    fill: white;
+}
+
 
 .icon-overlay {
-  display: none;
-  position: absolute;
-  top: 60%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  gap: 20px;
+    display: none;
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    gap: 20px;
 }
 
 .icon-overlay a {
-  position: absolute;
+    position: absolute;
 }
 
 .icon-overlay i {
-  font-size: 1.5em;
-  color: #333;
-  position: absolute;
+    font-size: 1.5em;
+    color: #333;
+    position: absolute;
 }
 
-.icon-overlay .fa-pencil-alt{
-  left: -50px;
-  top: 10px;
+.icon-overlay .fa-pencil-alt {
+    left: -50px;
+    top: 10px;
 }
 
 .icon-overlay .book-icon {
-  right: -50px;
-  top: 10px;
+    right: -50px;
+    top: 10px;
 }
 
 .svg-wrapper:hover .icon-overlay {
-  display: flex;
+    display: flex;
 }
 
 .description {
-  text-align: center;
-  font-size: 1em;
-  margin: 20px 0;
-  padding: 10px;
-  background-color: #ffeb3b;
-  border-radius: 5px;
-  color: #333;
+    text-align: center;
+    font-size: 1em;
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #ffeb3b;
+    border-radius: 5px;
+    color: #333;
 }
 
 .skill-tree-box {
-  display: inline-block;
-  background-color: black;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
+    display: inline-block;
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
 }
 
 .color-picker {
-  text-align: center;
-  margin-bottom: 20px;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .color-picker .start-here {
-  font-weight: bold;
-  margin-top: 10px;
+    font-weight: bold;
+    margin-top: 10px;
 }
 
 .custom-svg {
-  margin-top: 20px;
-  text-align: center;
+    margin-top: 20px;
+    text-align: center;
 }
 
 .custom-svg label {
-  display: block;
-  margin-bottom: 10px;
+    display: block;
+    margin-bottom: 10px;
 }
 
 .custom-svg input[type="text"] {
-  width: 200px;
-  padding: 5px;
-  font-size: 1em;
+    width: 200px;
+    padding: 5px;
+    font-size: 1em;
 }
 
 .custom-svg button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-  margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
 }
 
 .custom-svg button:hover {
-  background-color: #0056b3;
+    background-color: #0056b3;
 }
 
 @media print {
-  .color-picker {
-    display: none;
-  }
-  .custom-svg {
-    display: none;
-  }
-  .print-button {
-    display: none;
-  }
+    .color-picker {
+        display: none;
+    }
+    .custom-svg {
+        display: none;
+    }
+    .print-button {
+        display: none;
+    }
 }
 
 footer {
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-  background-color: #f0f0f0;
-  border-top: 1px solid #ccc;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background-color: #f0f0f0;
+    border-top: 1px solid #ccc;
+}
+
+.svg-wrapper .evidence-counter {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background-color: red;
+    color: white;
+    font-size: 10px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    z-index: 1;
 }
