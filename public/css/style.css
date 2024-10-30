@@ -15,7 +15,6 @@ h1 {
     flex-wrap: wrap;
     gap: 10px;
     justify-content: center;
-
 }
 
 .svg-wrapper {
@@ -34,6 +33,7 @@ h1 {
     fill: white;
     stroke: black;
     stroke-width: 1px;
+    
 }
 
 .icon-overlay {

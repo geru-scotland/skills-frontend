@@ -102,13 +102,16 @@ function updateHexagonColor(skillId) {
     const checkboxes = document.querySelectorAll('.task-checkbox');
     const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
 
-    localStorage.setItem(`hexagonColor-${skillId}`, allChecked ? "lightgreen" : "white");
+    const approvedEvidences = JSON.parse(localStorage.getItem('approvedEvidences')) || {};
+    const hasApprovedEvidence = approvedEvidences[skillId] && approvedEvidences[skillId].length > 0;
 
-    const hexagon = document.querySelector(`.svg-wrapper[data-id="${skillId}"] .hexagon`);
-    if (hexagon) {
-        hexagon.setAttribute("fill", allChecked ? "lightgreen" : "white");
+    if (allChecked && hasApprovedEvidence) {
+        localStorage.setItem(`hexagonColor-${skillId}`, "green");
+    } else {
+        localStorage.setItem(`hexagonColor-${skillId}`, "white");
     }
 }
+
 
 function handleEvidenceSubmit(event) {
     event.preventDefault();
@@ -154,10 +157,22 @@ function renderEvidenceTable(skillId) {
     });
 }
 
+
 window.approveEvidence = function(skillId, index) {
+    const approvedEvidences = JSON.parse(localStorage.getItem('approvedEvidences')) || {};
+
+    if (!approvedEvidences[skillId]) {
+        approvedEvidences[skillId] = [];
+    }
+
+    approvedEvidences[skillId].push(unverifiedEvidences[skillId][index]);
+    
     unverifiedEvidences[skillId].splice(index, 1);
     localStorage.setItem('unverifiedEvidences', JSON.stringify(unverifiedEvidences));
+    localStorage.setItem('approvedEvidences', JSON.stringify(approvedEvidences));
+
     renderEvidenceTable(skillId);
+    updateHexagonColor(skillId);
     alert('Evidence approved!');
 }
 

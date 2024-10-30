@@ -27,7 +27,6 @@ function buildSkills(skillsData) {
 function createSkillSVG(skill) {
 
     const unverifiedCount = unverifiedEvidences[skill.id]?.length || 0;
-
     // Hago un "React-like", jaja
     // Devuelvo el svg a modo de "componente" (más o menos...)
     return `
