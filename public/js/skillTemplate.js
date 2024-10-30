@@ -3,7 +3,6 @@ import skillsData from '../data/skills.js';
 const unverifiedEvidences = JSON.parse(localStorage.getItem('unverifiedEvidences')) || {};
 const taskStates = JSON.parse(localStorage.getItem('taskStates')) || {};
 
-
 function getSkillById(skillId) {
     return skillsData.find(skill => skill.id === skillId);
 }
@@ -47,7 +46,12 @@ function renderSkillTemplate() {
         <p class="skill-description">${skill.description}</p>
         <h2>Tasks to Complete</h2>
         <ul class="task-list">
-            ${tasks.map(task => `<li><label><input type="checkbox"> ${task}</label></li>`).join('')}
+            ${tasks.map((task, index) => `
+                <li>
+                    <label>
+                        <input type="checkbox" class="task-checkbox" data-task-index="${index}" ${taskStates[id] && taskStates[id][index] ? 'checked' : ''}>                         ${task}
+                    </label>
+                </li>`).join('')}
         </ul>
         <h2>Provide Evidence</h2>
         <form id="evidenceForm" class="evidence-form">
@@ -77,6 +81,33 @@ function renderSkillTemplate() {
 
     renderEvidenceTable(id);
     updateHexagonColor(id);
+}
+
+function handleTaskChange(event) {
+    const { id } = getQueryParams();
+    const taskIndex = event.target.getAttribute('data-task-index');
+
+    if (!taskStates[id]) {
+        taskStates[id] = [];
+    }
+
+    taskStates[id][taskIndex] = event.target.checked;
+
+    localStorage.setItem('taskStates', JSON.stringify(taskStates));
+    
+    updateHexagonColor(id);
+}
+
+function updateHexagonColor(skillId) {
+    const checkboxes = document.querySelectorAll('.task-checkbox');
+    const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+
+    localStorage.setItem(`hexagonColor-${skillId}`, allChecked ? "lightgreen" : "white");
+
+    const hexagon = document.querySelector(`.svg-wrapper[data-id="${skillId}"] .hexagon`);
+    if (hexagon) {
+        hexagon.setAttribute("fill", allChecked ? "lightgreen" : "white");
+    }
 }
 
 function handleEvidenceSubmit(event) {
@@ -121,14 +152,6 @@ function renderEvidenceTable(skillId) {
         `;
         evidenceTable.appendChild(row);
     });
-}
-
-function checkTasksCompletion(skill) {
-    const checkboxes = document.querySelectorAll('.task-checkbox');
-    const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
-    if (allChecked) {
-        hexagon.setAttribute("fill", "green");
-    }
 }
 
 window.approveEvidence = function(skillId, index) {
