@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
+// Redirigir a /login cuando se accede a la raíz
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Skills / Sistemas Web (2024-2025)' });
+  res.redirect('/login'); // Redirige a /login
 });
 
 module.exports = router;
