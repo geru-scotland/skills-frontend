@@ -42,6 +42,7 @@ router.get('/leaderboard', isAuthenticated, async (req, res) => {
       .filter(b => user.score >= b.bitpoints_min && user.score <= b.bitpoints_max)
       .sort((a, b) => b.bitpoints_max - a.bitpoints_max)[0];
       user.badge = badge ? badge.name : 'No badge';
+      console.log(user.username, user.score, badge);
     });
 
     //const sortedUsers = users.sort((a, b) => b.score - a.score);

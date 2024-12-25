@@ -27,6 +27,6 @@ badgeSchema.pre('save', function(next) {
     next();
 });
 
-const Badge = mongoose.model('Badge', badgeSchema);
+const Badge = mongoose.model('Badge', badgeSchema,'badges');
 
 module.exports = Badge;

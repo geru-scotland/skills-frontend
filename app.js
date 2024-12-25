@@ -10,6 +10,8 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const User = require('./models/User');
 const session = require('express-session');
+const fs = require('fs')
+const Badge = require('./models/Badge');
 
 // ***************************************
 // Rutas imports
@@ -78,6 +80,41 @@ mongoose.connect('mongodb://localhost:27017/skills-db')
 app.use(function(req, res, next) {
   next(createError(404));
 });
+// ***************************************
+// Scripts
+// ***************************************
+
+const loadBadges = async () => {
+  try {
+    const badgesData = JSON.parse(fs.readFileSync(path.join(__dirname, 'public/data', 'badges.json')));
+
+    for (const badge of badgesData) {
+      // Verifica si el badge ya existe por su nombre
+      const existingBadge = await Badge.findOne({ name: badge.rango });
+
+      if (!existingBadge) {
+        // Si no existe, crea una nueva badge
+        const newBadge = new Badge({
+          name: badge.rango,
+          bitpoints_min: badge.bitpoints_min,
+          bitpoints_max: badge.bitpoints_max,
+          image_url: badge.png,
+          description: badge.descripcion
+        });
+
+        await newBadge.save();
+        console.log(`Badge '${newBadge.name}' agregada a la base de datos.`);
+      } else {
+        console.log(`Badge '${badge.rango}' ya existe, no se agregó nuevamente.`);
+      }
+    }
+  } catch (error) {
+    console.error('Error cargando las badges:', error);
+  }
+};
+
+loadBadges();
+
 
 // ***************************************
 // Server init

@@ -1,47 +1,33 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaderboard</title>
-    <link rel="stylesheet" href="/css/leaderboard.css">
-    <script src="/js/leaderboard.js" type="module"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leaderboard</title>
+  <link rel="stylesheet" href="/css/leaderboard.css">
 </head>
 <body>
-<div class="container">
-    <h1>Leaderboard</h1>
-    <table>
-        <thead>
-        <tr>
-            <th>Badge</th>
-            <th>Image</th>
-            <th>Score range</th>
-        </tr>
-        </thead>
-        <tbody id="badgeTableBody">
-            <% sortedBadges.forEach(badge => { %>
-                <tr class="badge-row">
-                    <td class="badge-column">
-                        <img src="../badges/<%= badge.name %>-min.png" alt="<%= badge.name %>">
-                        <span><%= badge.name %></span>
-                    </td>
-                    <td>
-                        <% if (groupedUsers[badge.name] && groupedUsers[badge.name].length > 0) { %>
-                            <ul class="user-list">
-                                <% groupedUsers[badge.name].forEach(user => { %>
-                                    <li>
-                                        <%= user.username %> - Score: <%= user.score %>
-                                    </li>
-                                <% }) %>
-                            </ul>
-                        <% } else { %>
-                            <p>No users</p>
-                        <% } %>
-                    </td>
-                </tr>
-            <% }) %>
-        </tbody>
-    </table>
-</div>
+  <h1>Leaderboard</h1>
+
+  <% sortedBadges.forEach(badge => { %>
+    <div class="badge-section">
+      <div class="badge-header">
+        <img src="/badges/<%= badge.image_url %>" alt="<%= badge.name %>" class="badge-icon">
+        <h2><%= badge.name %></h2>
+      </div>
+      <p class="badge-description"><%= badge.description %></p>
+      
+      <% if (groupedUsers[badge.name] && groupedUsers[badge.name].length > 0) { %>
+        <ul class="user-list">
+          <% groupedUsers[badge.name].forEach(user => { %>
+            <li><%= user.username %> (Score: <%= user.score %>)</li>
+          <% }) %>
+        </ul>
+      <% } else { %>
+        <p class="no-users">No users for this badge yet.</p>
+      <% } %>
+    </div>
+    <hr>
+  <% }) %>
 </body>
 </html>
