@@ -3,7 +3,7 @@ const router = express.Router();
 
 router.get('/', function(req, res) {
   if (req.session && req.session.user) {
-    return res.redirect('/users/dashboard');
+    return res.render('skill-tree');
   }
   return res.redirect('/users/login');
 });

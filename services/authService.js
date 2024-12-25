@@ -18,7 +18,13 @@ async function loginUser(username, password) {
         throw new Error('Usuario o contraseña incorrectos.');
     }
 
-    return { id: user._id, username: user.username, role: user.role };
+    return {
+        id: user._id,
+        username: user.username,
+        admin: user.admin,
+        score: user.score,
+        completedSkills: user.completedSkills
+    };
 }
 
 // ***************************************
@@ -38,15 +44,25 @@ async function registerUser(username, password, password2) {
         throw new Error('El nombre de usuario ya está en uso.');
     }
 
-    const newUser = new User({ username, password });
+    const newUser = new User({
+        username,
+        password,
+        score: 0,
+        admin: false,
+        completedSkills: []
+    });
     await newUser.save();
 
-    return { id: newUser._id, username: newUser.username, role: newUser.role };
+    return {
+        id: newUser._id,
+        username: newUser.username,
+        admin: newUser.admin,
+        score: newUser.score,
+        completedSkills: newUser.completedSkills
+    };
 }
 
 module.exports = {
     loginUser,
     registerUser
 };
-
-

@@ -41,7 +41,7 @@ function renderSkillTemplate() {
     skillContainer.innerHTML = `
         <h1 class="skill-title">Skill: ${skillTitleText}</h1>
         <div class="skill-icon">
-            <img src="electronics/icons/${skill.icon}" alt="Skill Icon" width="100">
+            <img src="/electronics/icons/${skill.icon}" alt="Skill Icon" width="100">
         </div>
         <p class="skill-description">${skill.description}</p>
         <h2>Tasks to Complete</h2>

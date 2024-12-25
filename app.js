@@ -15,7 +15,6 @@ const session = require('express-session');
 // Rutas imports
 // ***************************************
 const indexRouter = require('./routes/index');
-const authRouter = require('./routes/auth');
 const usersRouter = require('./routes/users');
 
 // ***************************************
@@ -37,16 +36,14 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
 // ***************************************
 // Rutas
 // ***************************************
-
-
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/auth', authRouter);
-app.use(express.static(path.join(__dirname, 'public')));
+
 
 // ***************************************
 // MongoDB

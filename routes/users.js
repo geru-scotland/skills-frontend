@@ -30,7 +30,7 @@ router.post('/login', async (req, res) => {
     const userSessionData = await loginUser(username, password);
 
     req.session.user = userSessionData;
-    return res.redirect('/dashboard');
+    return res.render('skill-tree');
   } catch (error) {
     console.error(error.message);
     return res.status(400).render('login', { error: error.message });
@@ -44,7 +44,7 @@ router.post('/register', async (req, res) => {
     const userSessionData = await registerUser(username, password, password2);
 
     req.session.user = userSessionData;
-    return res.redirect('/dashboard');
+    return res.render('skill-tree');
   } catch (error) {
     console.error(error.message);
     return res.status(400).render('register', { error: error.message });
