@@ -34,7 +34,7 @@ router.get('/logout', isAuthenticated, (req, res) => {
 router.get('/leaderboard', isAuthenticated, async (req, res) => {
   try {
     const users = await User.find();
-
+    
     const badges = await Badge.find();
 
     users.forEach(user => {

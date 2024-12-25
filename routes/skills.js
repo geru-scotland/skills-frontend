@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const { isAuthenticated, isAdmin } = require('../middlewares/auth');
 const Skill = require('../models/Skill');
+const User = require('../models/User');
 const UserSkill = require('../models/UserSkill');
+const {Types} = require("mongoose");
 
 router.get('/', isAuthenticated, (req, res) => {
     res.redirect('/skills/electronics');
@@ -26,37 +28,118 @@ router.get('/:skillTreeName/add', isAdmin, (req, res) => {
     res.render('add-skill', { skillTreeName: req.params.skillTreeName });
 });
 
-router.get('/:skillTreeName/all', isAuthenticated, async (req, res) => {
+router.get('/:skillTreeName/all', async (req, res) => {
+
     try {
-        const { skillTreeName } = req.params;
 
-        const skills = await Skill.find({ set: skillTreeName });
-
-        if (!skills || skills.length === 0) {
-            return res.status(404).json({ error: 'No skills found for the specified skill tree.' });
+        if (!req.session || !req.session.user) {
+            return res.redirect('/users/login');
         }
 
-        res.json(skills);
+        const user = await User.findOne({ username: req.session.user.username });
+        if (!user) {
+            return res.status(401).json({ error: 'Usuario no encontrado.' });
+        }
+
+        const skillTreeName = req.params.skillTreeName;
+        const skills = await Skill.find({ set: skillTreeName });
+
+        if (!skills.length) {
+            return res.status(404).json({ error: 'No se encontraron habilidades para este conjunto.' });
+        }
+
+        const userSkills = await UserSkill.find({ user: user._id }).populate('skill');
+
+        const userSkillsMap = userSkills.reduce((acc, userSkill) => {
+            acc[userSkill.skill._id.toString()] = {
+                isCompleted: userSkill.completed,
+                verificationsCount: userSkill.verifications.length,
+            };
+            return acc;
+        }, {});
+
+        const skillsWithAdditionalInfo = skills.map(skill => {
+            const skillData = userSkillsMap[skill._id.toString()] || {
+                isCompleted: false,
+                verificationsCount: 0
+            };
+
+            return {
+                ...skill.toObject(),
+                isCompleted: skillData.isCompleted,
+                verificationsCount: skillData.verificationsCount
+            };
+        });
+
+        const unverifiedEvidences = await UserSkill.find({ verified: false })
+            .populate('skill', 'id')
+            .populate('user', 'username')
+            .exec();
+
+        const verifiedEvidences = await UserSkill.find({ user: user._id, verified: true })
+            .populate('skill', 'id')
+            .populate('user', 'username')
+            .exec();
+
+        const verifiedBySkill = verifiedEvidences.reduce((acc, evidence) => {
+            const skillId = evidence.skill.id;
+            if (!acc[skillId]) {
+                acc[skillId] = [];
+            }
+            acc[skillId].push(evidence);
+            return acc;
+        }, {});
+
+        const unverifiedBySkill = unverifiedEvidences.reduce((acc, evidence) => {
+            const skillId = evidence.skill.id;
+            if (!acc[skillId]) {
+                acc[skillId] = [];
+            }
+            acc[skillId].push(evidence);
+            return acc;
+        }, {});
+
+        res.json({
+            skills: skillsWithAdditionalInfo,
+            evidencesBySkill: {
+                unverifiedEvidences: unverifiedBySkill,
+                verifiedEvidences: verifiedBySkill,
+            },
+        });
+
     } catch (error) {
-        console.error('Error fetching skills:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('Error al obtener habilidades y evidencias:', error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
     }
 });
 
 router.get('/:skillID/get-by-id', isAuthenticated, async (req, res) => {
     try {
         const skill = await Skill.findOne({ id: req.params.skillID });
+        // Comprobar si el usuario logueado la ha completado
+        // Buscar con findone el usuario actual
+        const user = await User.findOne({ username: req.session.user.username });
+        if (!user) {
+            return res.status(401).json({ error: 'Usuario no autenticado' });
+        }
+
+        // Buscar en UserSkill si el usuario tiene la skill completada
+        const userSkill = await UserSkill.findOne({ user: user._id, skill: skill._id });
+        const isCompleted = userSkill ? userSkill.completed : false;
+
         if (!skill) {
             return res.status(404).json({ error: 'Skill no encontrada' });
         }
-        res.json(skill);
+
+        res.json({
+            skill,
+            isCompleted
+        });
     } catch (error) {
         console.error('Error al obtener la skill:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
-
-
 
 router.get('/:skillTreeName/view', isAuthenticated, async (req, res) => {
     const { id } = req.query;
@@ -71,19 +154,48 @@ router.get('/:skillTreeName/view', isAuthenticated, async (req, res) => {
         }
 
         const evidences = await UserSkill.find({ skill: skill._id, verified: false });
-        res.render('view-skill', { skill, evidences });
+        res.render('view-skill', { skill, evidences, isAdmin: req.session.user.admin, currentUsername: req.session.user.username });
     } catch (error) {
         console.error('Error al buscar la competencia:', error);
         res.status(500).render('error', { error: 'Error interno del servidor.' });
     }
 });
 
-
 router.get('/:skillTreeName/edit/:skillID', isAdmin, async (req, res) => {
     const skill = await Skill.findOne({ id: req.params.skillID });
     if (!skill) return res.status(404).render('error', { error: 'Competencia no encontrada' });
     res.render('edit-skill', { skill });
 });
+
+
+router.get('/:skillId/evidences', isAuthenticated, async (req, res) => {
+    try {
+        if (!req.session || !req.session.user) {
+            return res.redirect('/users/login');
+        }
+
+        const skillId = req.params.skillId;
+
+        const skill = await Skill.findOne({ id: skillId });
+        if (!skill) {
+            return res.status(404).json({ error: 'Skill no encontrado.' });
+        }
+
+        const evidences = await UserSkill.find({ skill: skill._id })
+            .populate('user', 'username')
+            .populate('skill', 'text');
+
+        if (!evidences.length) {
+            return res.status(404).json({ error: 'No se encontraron evidencias para esta habilidad.' });
+        }
+
+        res.json(evidences);
+    } catch (error) {
+        console.error('Error al obtener las evidencias:', error);
+        res.status(500).json({ error: 'Error al obtener las evidencias' });
+    }
+});
+
 
 router.post('/:skillTreeName/add', isAdmin, async (req, res) => {
     try {
@@ -105,38 +217,89 @@ router.post('/:skillTreeName/add', isAdmin, async (req, res) => {
     }
 });
 
-router.post('/:skillTreeName/:skillID/verify', isAuthenticated, async (req, res) => {
-    const { userSkillId, approved } = req.body;
+router.post('/evidence/:evidenceId/verify', isAuthenticated, async (req, res) => {
+    const { evidenceId } = req.params;
+
     try {
-        const userSkill = await UserSkill.findById(userSkillId);
-        if (!userSkill) return res.status(404).json({ error: 'UserSkill no encontrada' });
-        userSkill.verified = approved === 'true';
-        await userSkill.save();
-        res.json({ success: true });
+        const { ObjectId } = Types;
+        if (!ObjectId.isValid(evidenceId)) {
+            return res.status(400).json({ error: 'ID de evidencia inválido' });
+        }
+
+        const userSkillEvidence = await UserSkill.findById(evidenceId).populate('skill');
+        if (!userSkillEvidence) {
+            return res.status(404).json({ error: 'Evidencia no encontrada' });
+        }
+
+        const user = await User.findOne({ username: req.session.user.username });
+        if (!user) {
+            return res.status(401).json({ error: 'Usuario no autenticado' });
+        }
+
+        if (!userSkillEvidence.verifications.includes(user._id)) {
+            userSkillEvidence.verifications.push(user._id);
+        } else {
+            return res.status(400).json({ error: 'Usuario ya ha verificado esta evidencia' });
+        }
+
+        if (userSkillEvidence.verifications.length >= 2) {
+            userSkillEvidence.completed = true;
+            userSkillEvidence.verified = true;
+            userSkillEvidence.completedAt = new Date();
+
+            const owner = await User.findById(userSkillEvidence.user);
+            if (!owner.completedSkills.includes(userSkillEvidence.skill.id)) {
+                owner.completedSkills.push(userSkillEvidence.skill.id);
+                owner.score += userSkillEvidence.skill.score; // Incrementar el puntaje del usuario
+                await owner.save();
+            }
+        }
+
+        await userSkillEvidence.save();
+
+        res.json({
+            success: true,
+            message: userSkillEvidence.completed
+                ? 'Evidencia verificada y marcada como completada.'
+                : 'Evidencia verificada exitosamente.'
+        });
     } catch (error) {
-        res.status(500).json({ error: 'Error verificando la competencia' });
+        console.error('Error al registrar la verificación:', error);
+        res.status(500).json({ error: 'Error al registrar la verificación' });
     }
 });
 
-router.post('/:skillTreeName/submit-evidence', isAuthenticated, async (req, res) => {
-    const { skillId, evidence, userSkillId } = req.body;
+
+
+
+router.post('/:skillTreeName/:skillId/submit-evidence', isAuthenticated, async (req, res) => {
+    const { evidence } = req.body;
+    const skillId = req.params.skillId;
+    const skillTreeName = req.params.skillTreeName;
+
     try {
-        if (userSkillId) {
-            const userSkill = await UserSkill.findById(userSkillId);
-            if (!userSkill) return res.status(404).json({ error: 'UserSkill no encontrada' });
-            userSkill.evidence = evidence;
-            await userSkill.save();
-            return res.json({ success: true });
+
+        const user = await User.findOne({ username: req.session.user.username });
+        if (!user) {
+            return res.redirect('/users/login');
         }
-        const newUserSkill = new UserSkill({
-            user: req.session.user.id,
-            skill: skillId,
+
+        const skill = await Skill.findOne({ id: skillId, set: skillTreeName });
+        if (!skill) {
+            return res.status(404).json({ error: 'Skill no encontrado.' });
+        }
+
+        userSkill = new UserSkill({
+            user: user._id,
+            skill: skill._id,
             evidence
         });
-        await newUserSkill.save();
+        await userSkill.save();
+
         res.json({ success: true });
     } catch (error) {
-        res.status(500).json({ error: 'Error añadiendo la evidencia' });
+        console.error('Error al enviar la evidencia:', error);
+        res.status(500).json({ error: 'Error al enviar la evidencia' });
     }
 });
 
@@ -174,6 +337,52 @@ router.post('/:skillTreeName/edit/:skillID', isAdmin, async (req, res) => {
     } catch (error) {
         console.error('Error actualizando la competencia:', error);
         res.status(500).render('error', { error: 'Error actualizando la competencia' });
+    }
+});
+
+router.post('/evidence/:evidenceId/approve', isAdmin, async (req, res) => {
+    try {
+        const { evidenceId } = req.params;
+
+        const evidence = await UserSkill.findById(evidenceId).populate('skill');
+        if (!evidence) {
+            return res.status(404).json({ error: 'Evidencia no encontrada' });
+        }
+
+        evidence.verified = true;
+        evidence.completed = true;
+        evidence.completedAt = new Date();
+
+        const owner = await User.findById(evidence.user);
+        if (!owner.completedSkills.includes(evidence.skill.id)) {
+            owner.completedSkills.push(evidence.skill.id);
+            owner.score += evidence.skill.score;
+            await owner.save();
+        }
+
+        await evidence.save();
+
+        res.json({ success: true, message: 'Evidencia aprobada y marcada como completada.' });
+    } catch (error) {
+        console.error('Error al aprobar la evidencia:', error);
+        res.status(500).json({ error: 'Error al aprobar la evidencia' });
+    }
+});
+
+
+router.post('/evidence/:evidenceId/reject', isAdmin, async (req, res) => {
+    try {
+        const { evidenceId } = req.params;
+
+        const evidence = await UserSkill.findByIdAndDelete(evidenceId);
+        if (!evidence) {
+            return res.status(404).json({ error: 'Evidencia no encontrada' });
+        }
+
+        res.json({ success: true, message: 'Evidencia rechazada' });
+    } catch (error) {
+        console.error('Error al rechazar la evidencia:', error);
+        res.status(500).json({ error: 'Error al rechazar la evidencia' });
     }
 });
 

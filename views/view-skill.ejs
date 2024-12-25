@@ -8,6 +8,10 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script type="module" src="/js/skillTemplate.js"></script>
     <script type="module" src="/js/confetti.js"></script>
+    <script>
+        window.currentUsername = "<%= currentUsername %>";
+        window.isAdmin = <%= JSON.stringify(isAdmin) %>;
+    </script>
 </head>
 <body>
 <div id="skillContainer" class="container">

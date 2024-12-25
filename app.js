@@ -63,7 +63,7 @@ mongoose.connect('mongodb://localhost:27017/skills-db')
         const admin = new User({
           username: 'admin',
           password: 'admin123',
-          role: 'admin',
+          admin: true,
         });
         await admin.save();
         console.log('Primer usuario registrado como admin');

@@ -1,37 +1,38 @@
 
 
-const unverifiedEvidences = JSON.parse(localStorage.getItem('unverifiedEvidences')) || {};
-
 document.addEventListener("DOMContentLoaded", async () => {
     const skillTreeName = "electronics";
     const apiUrl = `http://localhost:3001/skills/${skillTreeName}/all`;
 
     try {
         const response = await fetch(apiUrl);
+        console.log(response);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const skillsData = await response.json();
+        const { skills, evidencesBySkill } = await response.json();
 
+        let { unverifiedEvidences, verifiedEvidences } = evidencesBySkill;
 
-        buildSkills(skillsData);
-        applyHexagonColors(skillsData);
+        window.unverifiedEvidences = unverifiedEvidences;
+        window.verifiedEvidences = verifiedEvidences;
+
+        console.log(skills)
+        buildSkills(skills);
+        applyHexagonColors(skills);
     } catch (error) {
-        console.error("Error fetching skills:", error);
+        console.error("Error fetching skills with evidences:", error);
     }
 });
 
 function applyHexagonColors(skillsData) {
-    const skillIds = skillsData.map(skill => skill.id);
-    
-    skillIds.forEach(skillId => {
-        const hexagon = document.querySelector(`.svg-wrapper[data-id="${skillId}"] .hexagon`);
-        const color = localStorage.getItem(`hexagonColor-${skillId}`) || "white";
+    skillsData.forEach(skill => {
+        const hexagon = document.querySelector(`.svg-wrapper[data-id="${skill.id}"] .hexagon`);
 
         if (hexagon) {
             hexagon.classList.remove('white', 'green');
-            if (color === "green") {
+            if (skill.isCompleted) {
                 hexagon.classList.add('green');
             } else {
                 hexagon.classList.add('white');
@@ -40,6 +41,7 @@ function applyHexagonColors(skillsData) {
     });
 }
 
+
 function buildSkills(skillsData) {
     const svgContainer = document.querySelector('.svg-container');
     svgContainer.innerHTML = skillsData.map(skill => createSkillSVG(skill)).join('');
@@ -47,13 +49,14 @@ function buildSkills(skillsData) {
 
 function createSkillSVG(skill) {
     //console.log(skill.text);
-    const unverifiedCount = unverifiedEvidences[skill.id]?.length || 0;
-    // Hago un "React-like", jaja
-    // Devuelvo el svg a modo de "componente" (más o menos...)
+    const unverifiedCount = window.unverifiedEvidences[skill.id]?.length || 0;
+    const verifiedCount = skill.verificationsCount || 0;
+    console.log(unverifiedCount, verifiedCount);
+
     return `
     <div class="svg-wrapper" data-id="${skill.id}" onmouseover="showDescription('${skill.description}')" onmouseout="hideDescription()">
         <svg width="100" height="100" viewBox="0 0 100 100">
-            <polygon id="hexagon-1" points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" class="hexagon"></polygon>
+            <polygon id="hexagon-${skill.id}" points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" class="hexagon"></polygon>
             <text x="50%" y="20%" text-anchor="middle" fill="black" font-size="10">
                 ${skill.text.split(' /').map(line => `<tspan x="50%" dy="1.2em" font-weight="bold">${line}</tspan>`).join('')}
             </text>
@@ -62,6 +65,10 @@ function createSkillSVG(skill) {
                 <circle cx="10" cy="10" r="10" fill="red"></circle>
                 <text x="10" y="15" text-anchor="middle" fill="white" font-size="10">${unverifiedCount}</text>
             ` : ''}
+            ${verifiedCount > 0 ? `
+                <circle cx="90" cy="10" r="10" fill="green"></circle>
+                <text x="90" y="15" text-anchor="middle" fill="white" font-size="10">${verifiedCount}</text>
+            ` : ''}            
         </svg>
         <div class="icon-overlay">
                         ${window.isAdmin ? `<a href="/skills/${skill.set}/edit/${skill.id}"><i class="fas fa-pencil-alt"></i></a>` : ''}                                                
