@@ -11,18 +11,29 @@ router.get('/', isAuthenticated, (req, res) => {
 });
 
 router.get('/:skillTreeName', isAuthenticated, async (req, res) => {
-    console.log(req.params.skillTreeName);
-    const skills = await Skill.find({ set: req.params.skillTreeName });
-    const completedSkills = req.user?.completedSkills || [];
-    const admin = req.session.user.admin;
-    res.render('index', {
-        skillTreeName: req.params.skillTreeName,
-        skills,
-        completedSkills,
-        username: req.session.user.username,
-        isAdmin: admin
-    });
+    try {
+        const skillTreeName = req.params.skillTreeName;
+        const skills = await Skill.find({ set: skillTreeName });
+        const totalSkills = await Skill.countDocuments();
+        const completedSkills = req.user?.completedSkills || [];
+        const admin = req.session.user.admin;
+        const userScore = req.user.score;
+
+        res.render('index', {
+            skillTreeName,
+            skills,
+            totalSkills,
+            completedSkills,
+            username: req.session.user.username,
+            userScore,
+            isAdmin: admin
+        });
+    } catch (error) {
+        console.error('Error al renderizar el index:', error);
+        res.status(500).render('error', { error: 'Error interno del servidor' });
+    }
 });
+
 
 router.get('/:skillTreeName/add', isAdmin, (req, res) => {
     res.render('add-skill', { skillTreeName: req.params.skillTreeName });
