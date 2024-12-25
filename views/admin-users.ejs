@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users</title>
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+<h1>Manage Users</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Username</th>
+        <th>Admin</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% users.forEach(user => { %>
+        <tr>
+            <td><%= user.username %></td>
+            <td><%= user.admin ? 'Yes' : 'No' %></td>
+            <td>
+                <button class="change-password-btn" data-user-id="<%= user._id %>">Change Password</button>
+            </td>
+        </tr>
+    <% }); %>
+    </tbody>
+</table>
+
+<div id="password-modal" class="hidden">
+    <h2>Change Password</h2>
+    <form id="change-password-form">
+        <input type="hidden" name="userId" id="user-id">
+        <label for="new-password">New Password:</label>
+        <input type="password" id="new-password" name="newPassword" required>
+        <button type="submit">Change Password</button>
+    </form>
+</div>
+
+<script>
+    document.querySelectorAll('.change-password-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            document.getElementById('password-modal').classList.remove('hidden');
+            document.getElementById('user-id').value = button.getAttribute('data-user-id');
+        });
+    });
+
+    document.getElementById('change-password-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const userId = document.getElementById('user-id').value;
+        const newPassword = document.getElementById('new-password').value;
+
+        try {
+            const response = await fetch('/admin/change-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId, newPassword })
+            });
+
+            if (response.ok) {
+                alert('Password changed successfully!');
+                document.getElementById('password-modal').classList.add('hidden');
+            } else {
+                alert('Error changing password.');
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Error changing password.');
+        }
+    });
+</script>
+</body>
+</html>
