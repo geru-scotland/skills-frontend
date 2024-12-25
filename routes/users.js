@@ -44,9 +44,19 @@ router.get('/leaderboard', isAuthenticated, async (req, res) => {
       user.badge = badge ? badge.name : 'No badge';
     });
 
-    const sortedUsers = users.sort((a, b) => b.score - a.score);
+    //const sortedUsers = users.sort((a, b) => b.score - a.score);
 
-    res.render('leaderboard', { users: sortedUsers });
+    const groupedUsers = badges.reduce((acc, badge) => {
+      const usersWithBadge = users.filter(user => user.badge === badge.name);
+      if (usersWithBadge.length > 0) {
+        acc[badge.name] = usersWithBadge;
+      }
+      return acc;
+    }, {});
+
+    const sortedBadges = badges.sort((a, b) => b.bitpoints_max - a.bitpoints_max);
+
+    res.render('leaderboard', { groupedUsers, sortedBadges });
   } catch (error) {
     console.error('Error recalculando la clasificación:', error);
     // res.status(500).render('error', { error: 'Error recalculando la clasificación' });
@@ -77,7 +87,7 @@ router.post('/register', async (req, res) => {
     const userSessionData = await registerUser(username, password, password2);
 
     req.session.user = userSessionData;
-    return res.render('/skills');
+    return res.redirect('/skills');
   } catch (error) {
     console.error(error.message);
     return res.status(400).render('register', { error: error.message });

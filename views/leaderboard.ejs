@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leaderboard</title>
-    <link rel="stylesheet" href="/styles/leaderboard.css">
+    <link rel="stylesheet" href="/css/leaderboard.css">
     <script src="/js/leaderboard.js" type="module"></script>
 </head>
 <body>
@@ -13,21 +13,33 @@
     <table>
         <thead>
         <tr>
-            <th>Rank</th>
-            <th>Username</th>
-            <th>Score</th>
             <th>Badge</th>
+            <th>Image</th>
+            <th>Score range</th>
         </tr>
         </thead>
-        <tbody id = "badgeTableBody">
-        <% users.forEach((user, index) => { %>
-            <tr>
-                <td><%= index + 1 %></td>
-                <td><%= user.username %></td>
-                <td><%= user.score %></td>
-                <td><%= user.badge %></td>
-            </tr>
-        <% }) %>
+        <tbody id="badgeTableBody">
+            <% sortedBadges.forEach(badge => { %>
+                <tr class="badge-row">
+                    <td class="badge-column">
+                        <img src="../badges/<%= badge.name %>-min.png" alt="<%= badge.name %>">
+                        <span><%= badge.name %></span>
+                    </td>
+                    <td>
+                        <% if (groupedUsers[badge.name] && groupedUsers[badge.name].length > 0) { %>
+                            <ul class="user-list">
+                                <% groupedUsers[badge.name].forEach(user => { %>
+                                    <li>
+                                        <%= user.username %> - Score: <%= user.score %>
+                                    </li>
+                                <% }) %>
+                            </ul>
+                        <% } else { %>
+                            <p>No users</p>
+                        <% } %>
+                    </td>
+                </tr>
+            <% }) %>
         </tbody>
     </table>
 </div>
