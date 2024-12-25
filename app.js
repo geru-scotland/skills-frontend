@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 const User = require('./models/User');
+const session = require('express-session');
 
 // ***************************************
 // Rutas imports
@@ -21,6 +22,14 @@ const usersRouter = require('./routes/users');
 // Config app Express
 // ***************************************
 const app = express();
+
+app.use(session({
+    secret: 'orbit...',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }
+}));
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
