@@ -46,7 +46,7 @@ function buildSkills(skillsData) {
 }
 
 function createSkillSVG(skill) {
-    console.log(skill.text);
+    //console.log(skill.text);
     const unverifiedCount = unverifiedEvidences[skill.id]?.length || 0;
     // Hago un "React-like", jaja
     // Devuelvo el svg a modo de "componente" (más o menos...)
@@ -64,8 +64,8 @@ function createSkillSVG(skill) {
             ` : ''}
         </svg>
         <div class="icon-overlay">
-            ${window.isAdmin ? `<i class="fas fa-pencil-alt"></i>` : ''}                        
-            <a href="skill-template.html?id=${skill.id}">
+                        ${window.isAdmin ? `<a href="/skills/${skill.set}/edit/${skill.id}"><i class="fas fa-pencil-alt"></i></a>` : ''}                                                
+            <a href="/skills/${skill.set}/view?id=${skill.id}">
                 <i class="fas fa-book book-icon"></i>
             </a>       
         </div>

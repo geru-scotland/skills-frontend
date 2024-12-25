@@ -30,19 +30,59 @@ router.get('/:skillTreeName/all', isAuthenticated, async (req, res) => {
     try {
         const { skillTreeName } = req.params;
 
-        // Encuentra las habilidades asociadas con el árbol solicitado
         const skills = await Skill.find({ set: skillTreeName });
 
-        // Verifica si se encontraron habilidades
         if (!skills || skills.length === 0) {
             return res.status(404).json({ error: 'No skills found for the specified skill tree.' });
         }
 
-        res.json(skills); // Devuelve las habilidades en formato JSON
+        res.json(skills);
     } catch (error) {
         console.error('Error fetching skills:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
+});
+
+router.get('/:skillID/get-by-id', isAuthenticated, async (req, res) => {
+    try {
+        const skill = await Skill.findOne({ id: req.params.skillID });
+        if (!skill) {
+            return res.status(404).json({ error: 'Skill no encontrada' });
+        }
+        res.json(skill);
+    } catch (error) {
+        console.error('Error al obtener la skill:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+
+
+router.get('/:skillTreeName/view', isAuthenticated, async (req, res) => {
+    const { id } = req.query;
+    if (!id) {
+        return res.status(400).render('error', { error: 'ID de la competencia no proporcionado.' });
+    }
+
+    try {
+        const skill = await Skill.findOne({ id });
+        if (!skill) {
+            return res.status(404).render('error', { error: 'Competencia no encontrada.' });
+        }
+
+        const evidences = await UserSkill.find({ skill: skill._id, verified: false });
+        res.render('view-skill', { skill, evidences });
+    } catch (error) {
+        console.error('Error al buscar la competencia:', error);
+        res.status(500).render('error', { error: 'Error interno del servidor.' });
+    }
+});
+
+
+router.get('/:skillTreeName/edit/:skillID', isAdmin, async (req, res) => {
+    const skill = await Skill.findOne({ id: req.params.skillID });
+    if (!skill) return res.status(404).render('error', { error: 'Competencia no encontrada' });
+    res.render('edit-skill', { skill });
 });
 
 router.post('/:skillTreeName/add', isAdmin, async (req, res) => {
@@ -65,13 +105,6 @@ router.post('/:skillTreeName/add', isAdmin, async (req, res) => {
     }
 });
 
-router.get('/:skillTreeName/view/:skillID', isAuthenticated, async (req, res) => {
-    const skill = await Skill.findOne({ id: req.params.skillID });
-    if (!skill) return res.status(404).render('error', { error: 'Competencia no encontrada' });
-    const evidences = await UserSkill.find({ skill: skill._id, verified: false });
-    res.render('skill-view', { skill, evidences });
-});
-
 router.post('/:skillTreeName/:skillID/verify', isAuthenticated, async (req, res) => {
     const { userSkillId, approved } = req.body;
     try {
@@ -83,12 +116,6 @@ router.post('/:skillTreeName/:skillID/verify', isAuthenticated, async (req, res)
     } catch (error) {
         res.status(500).json({ error: 'Error verificando la competencia' });
     }
-});
-
-router.get('/:skillTreeName/edit/:skillID', isAdmin, async (req, res) => {
-    const skill = await Skill.findOne({ id: req.params.skillID });
-    if (!skill) return res.status(404).render('error', { error: 'Competencia no encontrada' });
-    res.render('edit-skill', { skill });
 });
 
 router.post('/:skillTreeName/submit-evidence', isAuthenticated, async (req, res) => {
@@ -121,5 +148,34 @@ router.post('/:skillTreeName/delete/:skillID', isAdmin, async (req, res) => {
         res.status(500).render('error', { error: 'Error eliminando la competencia' });
     }
 });
+
+router.post('/:skillTreeName/edit/:skillID', isAdmin, async (req, res) => {
+    try {
+        const { text, icon, set, tasks, description, score } = req.body;
+
+        const updatedSkill = await Skill.findOneAndUpdate(
+            { id: req.params.skillID },
+            {
+                text,
+                icon,
+                set,
+                tasks: tasks.split(',').map(task => task.trim()),
+                description,
+                score: parseInt(score, 10)
+            },
+            { new: true }
+        );
+
+        if (!updatedSkill) {
+            return res.status(404).render('error', { error: 'Competencia no encontrada' });
+        }
+
+        res.redirect(`/skills/${req.params.skillTreeName}`);
+    } catch (error) {
+        console.error('Error actualizando la competencia:', error);
+        res.status(500).render('error', { error: 'Error actualizando la competencia' });
+    }
+});
+
 
 module.exports = router;
