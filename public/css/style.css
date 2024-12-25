@@ -168,3 +168,91 @@ footer {
     font-weight: bold;
     z-index: 1;
 }
+
+
+.admin-actions {
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    z-index: 10;
+}
+
+.btn-add-skill {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+/* Navbar */
+.navbar {
+    position: fixed;
+    top: 10px; /* Ajusta la distancia desde arriba */
+    left: 50%; /* Centrado horizontalmente */
+    transform: translateX(-50%); /* Centrado horizontalmente */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%; /* Más corto horizontalmente */
+    background-color: #f4e9a5;
+    padding: 10px 20px;
+    font-family: Arial, sans-serif;
+    border-bottom: 2px solid #ccc;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 20;
+}
+
+.navbar-left {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.navbar-right {
+    display: flex;
+    gap: 15px; /* Espaciado entre enlaces */
+    font-size: 14px;
+}
+
+.navbar-right a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.navbar-right a:hover {
+    text-decoration: underline;
+}
+
+.navbar a {
+    font-weight: normal;
+}
+
+.navbar a:last-child {
+    font-weight: bold; /* Admin Dashboard más destacado */
+}
+
+/* Admin actions */
+.admin-actions {
+    position: absolute;
+    top: 130px; /* Ajusta para que no se solape con el navbar */
+    right: 20px;
+    z-index: 10;
+}
+
+.btn-add-skill {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn-add-skill:hover {
+    background-color: #218838;
+}

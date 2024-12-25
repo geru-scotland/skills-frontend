@@ -16,6 +16,8 @@ const session = require('express-session');
 // ***************************************
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const skillsRouter = require('./routes/skills');
+const adminRouter = require('./routes/admin');
 
 // ***************************************
 // Config app Express
@@ -43,12 +45,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 // ***************************************
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-
+app.use('/skills', skillsRouter);
+app.use('/admin', adminRouter);
 
 // ***************************************
 // MongoDB
 // ***************************************
-mongoose.connect('mongodb://localhost:27017/tu_basededatos')
+mongoose.connect('mongodb://localhost:27017/skills-db')
     .then(async () => {
       console.log('Conectado a MongoDB');
       const userCount = await User.countDocuments();

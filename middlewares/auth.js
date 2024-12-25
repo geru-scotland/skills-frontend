@@ -11,7 +11,7 @@ function isAuthenticated(req, res, next) {
 }
 
 function isAdmin(req, res, next) {
-    if (req.session && req.session.user && req.session.user.role === 'admin') {
+    if (req.session && req.session.user && req.session.user.admin) {
         return next();
     }
     return res.status(403).render('error', { error: 'Acceso denegado. Se requieren permisos de administrador.' });

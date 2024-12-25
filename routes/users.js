@@ -20,6 +20,36 @@ router.get('/dashboard', isAuthenticated, function(req, res) {
   res.render('dashboard', { user: req.session.user });
 });
 
+router.get('/logout', isAuthenticated, (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      console.error('Error cerrando la sesión:', err);
+      return res.status(500).render('error', { error: 'Error cerrando la sesión' });
+    }
+    res.render('login', { message: 'Sesión cerrada exitosamente' });
+  });
+});
+
+router.get('/leaderboard', isAuthenticated, async (req, res) => {
+  try {
+    const users = await User.find();
+
+    const badges = await Badge.find();
+
+    users.forEach(user => {
+      const badge = badges.find(b => user.score >= b.bitpoints_min && user.score <= b.bitpoints_max);
+      user.badge = badge ? badge.name : 'No badge';
+    });
+
+    const sortedUsers = users.sort((a, b) => b.score - a.score);
+
+    res.render('leaderboard', { users: sortedUsers });
+  } catch (error) {
+    console.error('Error recalculando la clasificación:', error);
+    res.status(500).render('error', { error: 'Error recalculando la clasificación' });
+  }
+});
+
 // ***************************************
 // POST
 // ***************************************
@@ -30,7 +60,7 @@ router.post('/login', async (req, res) => {
     const userSessionData = await loginUser(username, password);
 
     req.session.user = userSessionData;
-    return res.render('skill-tree');
+    return res.redirect('/skills');
   } catch (error) {
     console.error(error.message);
     return res.status(400).render('login', { error: error.message });
@@ -44,7 +74,7 @@ router.post('/register', async (req, res) => {
     const userSessionData = await registerUser(username, password, password2);
 
     req.session.user = userSessionData;
-    return res.render('skill-tree');
+    return res.render('/skills');
   } catch (error) {
     console.error(error.message);
     return res.status(400).render('register', { error: error.message });
