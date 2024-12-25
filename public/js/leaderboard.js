@@ -12,7 +12,7 @@ function loadBadgeTable() {
 
         const badgeCell = document.createElement('td');
         const badgeImg = document.createElement('img');
-        badgeImg.src = `badges/${badge.png.replace('.png', '-min.png')}`;
+        badgeImg.src = `../badges/${badge.png.replace('.png', '-min.png')}`;
         badgeImg.alt = badge.rango;
         badgeCell.appendChild(badgeImg);
         row.appendChild(badgeCell);

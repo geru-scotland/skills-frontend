@@ -22,6 +22,10 @@ const userSchema = new mongoose.Schema({
   completedSkills: {
     type: [String],
     default: []
+  },
+  badge:{
+    type: String,
+    default: 'Observador'
   }
 });
 

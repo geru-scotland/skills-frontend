@@ -2,6 +2,7 @@ const express = require('express');
 const User = require('../models/User');
 const { isAuthenticated } = require('../middlewares/auth');
 const { loginUser, registerUser } = require('../services/authService');
+const Badge = require('../models/Badge');
 const router = express.Router();
 
 
@@ -13,7 +14,7 @@ router.get('/login', (req, res) => {
 });
 
 router.get('/register', (req, res) => {
-  res.render('register');
+  res.render('register', {error: null});
 });
 
 router.get('/dashboard', isAuthenticated, function(req, res) {
@@ -37,7 +38,9 @@ router.get('/leaderboard', isAuthenticated, async (req, res) => {
     const badges = await Badge.find();
 
     users.forEach(user => {
-      const badge = badges.find(b => user.score >= b.bitpoints_min && user.score <= b.bitpoints_max);
+      const badge = badges
+      .filter(b => user.score >= b.bitpoints_min && user.score <= b.bitpoints_max)
+      .sort((a, b) => b.bitpoints_max - a.bitpoints_max)[0];
       user.badge = badge ? badge.name : 'No badge';
     });
 
@@ -46,7 +49,7 @@ router.get('/leaderboard', isAuthenticated, async (req, res) => {
     res.render('leaderboard', { users: sortedUsers });
   } catch (error) {
     console.error('Error recalculando la clasificación:', error);
-    res.status(500).render('error', { error: 'Error recalculando la clasificación' });
+    // res.status(500).render('error', { error: 'Error recalculando la clasificación' });
   }
 });
 
