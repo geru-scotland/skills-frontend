@@ -45,19 +45,25 @@ router.post('/badges/delete/:id', isAdmin, async (req, res) => {
 });
 
 router.get('/users', isAdmin, async (req, res) => {
-    const users = await User.find().select('username admin');
-    res.render('admin-users', { users });
+    try {
+        const users = await User.find({}, 'username admin');
+        res.render('admin-users', { users });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error obteniendo los usuarios');
+    }
 });
 
 router.post('/change-password', isAdmin, async (req, res) => {
     const { userId, newPassword } = req.body;
     try {
-        const user = await User.findById(userId);
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        const user = await User.findByIdAndUpdate(userId, { password: hashedPassword });
         if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
-        user.password = await bcrypt.hash(newPassword, 10);
-        await user.save();
+
         res.json({ success: true });
     } catch (error) {
+        console.error('Error cambiando la contraseña:', error);
         res.status(500).json({ error: 'Error cambiando la contraseña' });
     }
 });

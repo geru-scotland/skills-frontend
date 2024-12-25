@@ -191,13 +191,13 @@ footer {
 /* Navbar */
 .navbar {
     position: fixed;
-    top: 10px; /* Ajusta la distancia desde arriba */
-    left: 50%; /* Centrado horizontalmente */
-    transform: translateX(-50%); /* Centrado horizontalmente */
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 80%; /* Más corto horizontalmente */
+    width: 80%;
     background-color: #f4e9a5;
     padding: 10px 20px;
     font-family: Arial, sans-serif;
@@ -206,6 +206,7 @@ footer {
     z-index: 20;
 }
 
+
 .navbar-left {
     font-size: 16px;
     font-weight: bold;
@@ -213,7 +214,7 @@ footer {
 
 .navbar-right {
     display: flex;
-    gap: 15px; /* Espaciado entre enlaces */
+    gap: 15px;
     font-size: 14px;
 }
 
@@ -231,13 +232,13 @@ footer {
 }
 
 .navbar a:last-child {
-    font-weight: bold; /* Admin Dashboard más destacado */
+    font-weight: bold;
 }
 
 /* Admin actions */
 .admin-actions {
     position: absolute;
-    top: 130px; /* Ajusta para que no se solape con el navbar */
+    top: 130px;
     right: 20px;
     z-index: 10;
 }
@@ -255,4 +256,13 @@ footer {
 
 .btn-add-skill:hover {
     background-color: #218838;
+}
+
+
+.welcome-message {
+    font-size: 18px;
+    font-weight: bold;
+    color: #007bff; /* Azul */
+    margin-left: auto; /* Empuja el elemento hacia la derecha */
+    white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
 }

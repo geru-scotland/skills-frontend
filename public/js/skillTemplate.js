@@ -1,11 +1,33 @@
-import skillsData from '../data/skills.js';
 
 const unverifiedEvidences = JSON.parse(localStorage.getItem('unverifiedEvidences')) || {};
 const taskStates = JSON.parse(localStorage.getItem('taskStates')) || {};
 
 function getSkillById(skillId) {
-    return skillsData.find(skill => skill.id === skillId);
+    return fetch(`/skills/${skillId}/get-by-id`)
+        .then(function(response) {
+            if (!response.ok) {
+                throw new Error('Error al obtener la skill: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(function(skill) {
+            return {
+                id: skill.id,
+                text: skill.text,
+                icon: skill.icon,
+                set: skill.set,
+                tasks: skill.tasks || [],
+                resources: skill.resources || [],
+                description: skill.description || '',
+                score: skill.score || 1
+            };
+        })
+        .catch(function(error) {
+            console.error('Error al obtener la información de la skill:', error);
+            return null;
+        });
 }
+
 
 function getQueryParams() {
     const queryParams = new URLSearchParams(window.location.search);
@@ -16,29 +38,24 @@ function getQueryParams() {
 
 function renderSkillTemplate() {
     const { id } = getQueryParams();
-    const skill = getSkillById(id);
+    console.log(id);
+    let skill;
 
-    if (!skill) {
-        console.error('Skill not found');
-        return;
-    }
+    getSkillById(id).then(function(result) {
+        skill = result;
+        console.log('Skill obtenida:', skill);
+        if (!skill) {
+            console.error('Skill not found');
+            return;
+        }
 
-    const tasks = [
-        "Task 1",
-        "Task 2",
-        "Task 3"
-    ];
+        const tasks = skill.tasks || [];
+        const resources = skill.resources || [];
 
-    const resources = [
-        { url: "URL1", name: "Resource 1" },
-        { url: "URL2", name: "Resource 2" },
-        { url: "URL3", name: "Resource 3" }
-    ];
+        const skillTitleText = skill.text.replace(/ *\/ */g, ' ');
+        const skillContainer = document.getElementById('skillContainer');
 
-    const skillTitleText = skill.text.replace(/ *\/ */g, ' ');
-    const skillContainer = document.getElementById('skillContainer');
-
-    skillContainer.innerHTML = `
+        skillContainer.innerHTML = `
         <h1 class="skill-title">Skill: ${skillTitleText}</h1>
         <div class="skill-icon">
             <img src="/electronics/icons/${skill.icon}" alt="Skill Icon" width="100">
@@ -60,7 +77,7 @@ function renderSkillTemplate() {
         </form>
         <h2>Resources</h2>
         <ul class="resources-list">
-            ${resources.map(resource => `<li><a href="${resource.url}">${resource.name}</a></li>`).join('')}
+            ${resources.map(resource => `<li><a href="${resource.url}" target="_blank">${resource.name}</a></li>`).join('')}
         </ul>
         <h2>Unverified Evidence Submissions</h2>
         <table id="evidenceTable" class="evidence-table">
@@ -72,16 +89,18 @@ function renderSkillTemplate() {
         </table>
     `;
 
-    const taskCheckboxes = document.querySelectorAll('.task-checkbox');
-    taskCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', handleTaskChange);
+        const taskCheckboxes = document.querySelectorAll('.task-checkbox');
+        taskCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', handleTaskChange);
+        });
+
+        document.getElementById('evidenceForm').addEventListener('submit', handleEvidenceSubmit);
+
+        renderEvidenceTable(id);
+        updateHexagonColor(id);
     });
-
-    document.getElementById('evidenceForm').addEventListener('submit', handleEvidenceSubmit);
-
-    renderEvidenceTable(id);
-    updateHexagonColor(id);
 }
+
 
 function handleTaskChange(event) {
     const { id } = getQueryParams();
