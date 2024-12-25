@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Badges</title>
+  <link rel="stylesheet" href="/css/admin-badges.css">
+</head>
+<body>
+  <h1>Manage Badges</h1>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Bitpoints Min</th>
+        <th>Bitpoints Max</th>
+        <th>Image URL</th>
+        <th>Description</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% badges.forEach(badge => { %>
+        <tr>
+          <form method="POST" action="/admin/badges/edit">
+            <td>
+              <input type="text" name="name" value="<%= badge.name %>">
+              <input type="hidden" name="id" value="<%= badge._id %>">
+            </td>
+            <td><input type="number" name="bitpoints_min" value="<%= badge.bitpoints_min %>"></td>
+            <td><input type="number" name="bitpoints_max" value="<%= badge.bitpoints_max %>"></td>
+            <td><input type="text" name="image_url" value="<%= badge.image_url %>"></td>
+            <td><input type="text" name="description" value="<%= badge.description %>"></td>
+            <td>
+              <button type="submit" name="action" value="edit">Save</button>
+              <button type="submit" name="action" value="delete">Delete</button>
+            </td>
+          </form>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <h2>Add New Badge</h2>
+  <form method="POST" action="/admin/badges/add">
+    <label>
+      Name:
+      <input type="text" name="name" required>
+    </label>
+    <label>
+      Bitpoints Min:
+      <input type="number" name="bitpoints_min" required>
+    </label>
+    <label>
+      Bitpoints Max:
+      <input type="number" name="bitpoints_max" required>
+    </label>
+    <label>
+      Image URL:
+      <input type="text" name="image_url" required>
+    </label>
+    <label>
+      Description:
+      <input type="text" name="description" required>
+    </label>
+    <button type="submit">Add Badge</button>
+  </form>
+</body>
+</html>

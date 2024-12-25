@@ -20,20 +20,52 @@ router.get('/badges/edit/:id', isAdmin, async (req, res) => {
     res.render('edit-badge', { badge });
 });
 
-router.post('/badges/edit/:id', isAdmin, async (req, res) => {
+// POST: Editar o eliminar badges
+router.post('/badges/edit', async (req, res) => {
     try {
-        const { name, bitpoints_min, bitpoints_max, image_url } = req.body;
-        await Badge.findByIdAndUpdate(req.params.id, {
-            name,
-            bitpoints_min,
-            bitpoints_max,
-            image_url
+      const { id, name, bitpoints_min, bitpoints_max, image_url, description } = req.body;
+  
+      if (req.body.action === 'delete') {
+        // Eliminar la badge
+        await Badge.findByIdAndDelete(id);
+      } else {
+        // Editar la badge
+        await Badge.findByIdAndUpdate(id, {
+          name,
+          bitpoints_min,
+          bitpoints_max,
+          image_url,
+          description,
         });
-        res.redirect('/admin/badges');
+      }
+  
+      res.redirect('/admin/badges');
     } catch (error) {
-        res.status(500).render('error', { error: 'Error actualizando la insignia' });
+      console.error('Error editando/eliminando badge:', error);
+      res.status(500).send('Error procesando la solicitud');
     }
-});
+  });
+
+  // POST: Agregar nueva badge
+router.post('/badges/add', async (req, res) => {
+    try {
+      const { name, bitpoints_min, bitpoints_max, image_url, description } = req.body;
+  
+      const newBadge = new Badge({
+        name,
+        bitpoints_min,
+        bitpoints_max,
+        image_url,
+        description,
+      });
+  
+      await newBadge.save();
+      res.redirect('/admin/badges');
+    } catch (error) {
+      console.error('Error agregando badge:', error);
+      res.status(500).send('Error procesando la solicitud');
+    }
+  });
 
 router.post('/badges/delete/:id', isAdmin, async (req, res) => {
     try {
