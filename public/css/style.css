@@ -238,10 +238,11 @@ footer {
 /* Admin actions */
 .admin-actions {
     position: absolute;
-    top: 130px;
+    top: 70px;
     right: 20px;
     z-index: 10;
 }
+
 
 .btn-add-skill {
     background-color: #28a745;
@@ -252,6 +253,7 @@ footer {
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s;
+    margin: 0 10px;
 }
 
 .btn-add-skill:hover {
@@ -265,4 +267,20 @@ footer {
     color: #007bff; /* Azul */
     margin-left: auto; /* Empuja el elemento hacia la derecha */
     white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
+}
+
+.skill-score {
+    font-size: 18px;
+    font-weight: bold;
+    color: #28a745;
+    margin-top: 10px;
+}
+
+.skill-score-badge {
+    background-color: #28a745;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 14px;
+    vertical-align: middle;
 }

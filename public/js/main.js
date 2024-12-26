@@ -48,7 +48,7 @@ function buildSkills(skillsData) {
 }
 
 function createSkillSVG(skill) {
-    //console.log(skill.text);
+
     const unverifiedCount = window.unverifiedEvidences[skill.id]?.length || 0;
     const verifiedCount = skill.verificationsCount || 0;
     console.log(unverifiedCount, verifiedCount);

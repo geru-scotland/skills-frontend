@@ -58,43 +58,42 @@ function renderSkillTemplate() {
         const skillTitleText = skill.text.replace(/ *\/ */g, ' ');
         const skillContainer = document.getElementById('skillContainer');
 
-        // Renderizar el contenido principal
         skillContainer.innerHTML = `
-        <h1 class="skill-title">Skill: ${skillTitleText}</h1>
-        <div class="skill-icon">
-            <img src="/electronics/icons/${skill.icon}" alt="Skill Icon" width="100">
-        </div>
-        <p class="skill-description">${skill.description}</p>
-        <h2>Tasks to Complete</h2>
-        <ul class="task-list">
-            ${tasks.map((task, index) => `
-                <li>
-                    <label>
-                        <input type="checkbox" class="task-checkbox" data-task-index="${index}" ${taskStates[id] && taskStates[id][index] ? 'checked' : ''}> 
-                        ${task}
-                    </label>
-                </li>`).join('')}
-        </ul>
-        <h2>Provide Evidence</h2>
-        ${!skill.isCompleted ? `
-            <form id="evidenceForm" class="evidence-form" action="/skills/${skill.set}/${skill.id}/submit-evidence" method="POST">
-                <textarea name="evidence" placeholder="Enter a URL or explanation as evidence for completing this skill" required></textarea>
-                <button type="submit" class="submit-btn">Submit Evidence</button>
-            </form>
-        ` : `<p>This skill is already completed. No further evidence is required.</p>`}
-        <h2>Resources</h2>
-        <ul class="resources-list">
-            ${resources.map(resource => `<li><a href="${resource.url}" target="_blank">${resource.name}</a></li>`).join('')}
-        </ul>
-        <h2>Unverified Evidence Submissions</h2>
-        <table id="evidenceTable" class="evidence-table">
-            <tr>
-                <th>User</th>
-                <th>Evidence</th>
-                <th>Actions</th>
-            </tr>
-        </table>
-    `;
+    <h1 class="skill-title">Skill: ${skillTitleText} <span class="skill-score-badge">Score:${skill.score}</span></h1>   
+    <div class="skill-icon">
+        <img src="/electronics/icons/${skill.icon}" alt="Skill Icon" width="100">
+    </div>
+    <p class="skill-description">${skill.description}</p>
+    <h2>Tasks to Complete</h2>
+    <ul class="task-list">
+        ${tasks.map((task, index) => `
+            <li>
+                <label>
+                    <input type="checkbox" class="task-checkbox" data-task-index="${index}" ${taskStates[id] && taskStates[id][index] ? 'checked' : ''}> 
+                    ${task}
+                </label>
+            </li>`).join('')}
+    </ul>
+    <h2>Provide Evidence</h2>
+    ${!skill.isCompleted ? `
+        <form id="evidenceForm" class="evidence-form" action="/skills/${skill.set}/${skill.id}/submit-evidence" method="POST">
+            <textarea name="evidence" placeholder="Enter a URL or explanation as evidence for completing this skill" required></textarea>
+            <button type="submit" class="submit-btn">Submit Evidence</button>
+        </form>
+    ` : `<p>This skill is already completed. No further evidence is required.</p>`}
+    <h2>Resources</h2>
+    <ul class="resources-list">
+        ${resources.map(resource => `<li><a href="${resource.url}" target="_blank">${resource.name}</a></li>`).join('')}
+    </ul>
+    <h2>Unverified Evidence Submissions</h2>
+    <table id="evidenceTable" class="evidence-table">
+        <tr>
+            <th>User</th>
+            <th>Evidence</th>
+            <th>Actions</th>
+        </tr>
+    </table>
+`;
 
         const checkboxes = document.querySelectorAll(".task-list input[type='checkbox']");
 

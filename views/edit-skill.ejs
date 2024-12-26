@@ -3,39 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Competencia</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <title>Edit Skill</title>
+    <link rel="stylesheet" href="/css/forms.css">
 </head>
 <body>
-<h1>Editar Competencia</h1>
+<h1>Edit Skill</h1>
 <form action="/skills/<%= skill.set %>/edit/<%= skill.id %>" method="POST">
-    <div>
-        <label for="text">Nombre de la Competencia:</label>
+    <div class="form-group">
+        <label for="text">Skill Name:</label>
         <input type="text" id="text" name="text" value="<%= skill.text %>" required>
     </div>
-    <div>
-        <label for="icon">Ícono:</label>
-        <input type="text" id="icon" name="icon" value="<%= skill.icon %>" placeholder="URL del ícono">
+    <div class="form-group">
+        <label for="icon">Icon URL:</label>
+        <input type="text" id="icon" name="icon" value="<%= skill.icon %>" placeholder="URL of the icon">
     </div>
-    <div>
+    <div class="form-group">
         <label for="set">Set:</label>
         <input type="text" id="set" name="set" value="<%= skill.set %>" required>
     </div>
-    <div>
-        <label for="tasks">Tareas (separadas por comas):</label>
-        <input type="text" id="tasks" name="tasks" value="<%= skill.tasks.join(', ') %>">
+    <div class="form-group">
+        <label for="tasks">Tasks (comma-separated):</label>
+        <textarea id="tasks" name="tasks" rows="3"><%= skill.tasks.join(', ') %></textarea>
     </div>
-
-    <div>
-        <label for="description">Descripción:</label>
-        <textarea id="description" name="description" rows="4" cols="50"><%= skill.description %></textarea>
+    <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" rows="4"><%= skill.description %></textarea>
     </div>
-    <div>
-        <label for="score">Puntuación:</label>
+    <div class="form-group">
+        <label for="score">Score:</label>
         <input type="number" id="score" name="score" value="<%= skill.score %>" min="1">
     </div>
-    <button type="submit">Guardar Cambios</button>
+    <button type="submit" class="btn-submit">Save Changes</button>
 </form>
-
 </body>
 </html>

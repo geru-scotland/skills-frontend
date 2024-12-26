@@ -146,3 +146,11 @@ body {
     background-color: #c82333;
 }
 
+.skill-score-badge {
+    background-color: #28a745;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 14px;
+    vertical-align: middle;
+}
