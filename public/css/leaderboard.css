@@ -75,3 +75,43 @@ body {
     margin: 20px 0;
   }
   
+  /* Estilos para la tabla de Descripción de las Medallas */
+#badge-descriptions-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-family: Arial, sans-serif;
+}
+
+#badge-descriptions-table th, 
+#badge-descriptions-table td {
+  border: 1px solid #dee2e6;
+  padding: 10px;
+  text-align: center;
+}
+
+#badge-descriptions-table th {
+  background-color: #007bff;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+#badge-descriptions-table td {
+  background-color: #ffffff;
+}
+
+#badge-descriptions-table td img {
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #dee2e6;
+}
+
+#badge-descriptions-table tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+#badge-descriptions-table tr:hover {
+  background-color: #e9ecef;
+  transition: background-color 0.2s ease-in-out;
+}

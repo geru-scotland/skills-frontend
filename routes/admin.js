@@ -11,6 +11,7 @@ router.get('/dashboard', isAdmin, (req, res) => {
 
 router.get('/badges', isAdmin, async (req, res) => {
     const badges = await Badge.find().sort({ bitpoints_min: 1 });
+    console.log(badges)
     res.render('admin-badges', { badges });
 });
 

@@ -15,7 +15,6 @@
         <th>Bitpoints Min</th>
         <th>Bitpoints Max</th>
         <th>Image URL</th>
-        <th>Description</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -30,7 +29,6 @@
             <td><input type="number" name="bitpoints_min" value="<%= badge.bitpoints_min %>"></td>
             <td><input type="number" name="bitpoints_max" value="<%= badge.bitpoints_max %>"></td>
             <td><input type="text" name="image_url" value="<%= badge.image_url %>"></td>
-            <td><input type="text" name="description" value="<%= badge.description %>"></td>
             <td>
               <button type="submit" name="action" value="edit">Save</button>
               <button type="submit" name="action" value="delete">Delete</button>
@@ -61,7 +59,7 @@
     </label>
     <label>
       Description:
-      <input type="text" name="description" required>
+      <textarea name="description" rows="3" cols="30" required></textarea>
     </label>
     <button type="submit">Add Badge</button>
   </form>
