@@ -20,7 +20,7 @@ async function importData() {
                 ...skill,
                 set: "electronics",
                 description: generateDynamicDescription(skill.text),
-                score: 10,
+                score: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
                 tasks: generateRandomTasks()
             }));
 

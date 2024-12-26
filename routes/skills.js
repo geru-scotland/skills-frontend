@@ -280,9 +280,6 @@ router.post('/evidence/:evidenceId/verify', isAuthenticated, async (req, res) =>
     }
 });
 
-
-
-
 router.post('/:skillTreeName/:skillId/submit-evidence', isAuthenticated, async (req, res) => {
     const { evidence } = req.body;
     const skillId = req.params.skillId;

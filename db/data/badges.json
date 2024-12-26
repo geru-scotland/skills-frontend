@@ -30,7 +30,7 @@
   {
     "name": "Cadete nivel-2",
     "bitpoints_min": 25,
-    "bitpoints_max": 34,
+    "bitpoints_max": 39,
     "image_url": "04-cadete-N2-min.png",
     "descripcion": "Ya sabes sintetizar circuitos simples desde cero para encender leds. Comprendes los bits perfectamente"
   },
@@ -43,119 +43,119 @@
   },
   {
     "name": "Aspirante a Padawan",
-    "bitpoints_min": 60,
+    "bitpoints_min": 50,
     "bitpoints_max": 69,
     "image_url": "06-Aspirante-padawan-min.png",
     "descripcion": "Conoces las propiedades de paralelismo del hardware, y las sabes utilizar. Bombeas bits. Haces manipulaciones básicas con bits"
   },
   {
     "name": "Aspirante a Padawan Nivel 1",
-    "bitpoints_min": 80,
+    "bitpoints_min": 70,
     "bitpoints_max": 89,
     "image_url": "07-Aspirante-padawan-N1-min.png",
     "descripcion": "Manejas los LEDs internos y externos con mucha soltura. Sabes conectar circuitos externos y hacerlos en diferentes soportes"
   },
   {
     "name": "Aspirante a Padawan Nivel 2",
-    "bitpoints_min": 100,
+    "bitpoints_min": 90,
     "bitpoints_max": 109,
     "image_url": "08-Aspirante-padawan-N2-min.png",
     "descripcion": "Sabes hacer circuitos digitales con entradas y salidas. Has practicado tus habilidades hardware moviendo Servos"
   },
   {
     "name": "Aspirante a Padawan Nivel 3",
-    "bitpoints_min": 120,
+    "bitpoints_min": 110,
     "bitpoints_max": 129,
     "image_url": "09-Aspirante-padawan-N3-min.png",
     "descripcion": "Ya sabes hacer circuitos combinacionales básicos con puertas AND y NOT. Tu manipulación de bits progresa adecuadamente"
   },
   {
     "name": "Padawan",
-    "bitpoints_min": 150,
+    "bitpoints_min": 130,
     "bitpoints_max": 159,
     "image_url": "10-Padawan-min.png",
     "descripcion": "Empiezas a dominar los periféricos básicos de entrada salida. Sabes emitir tus primeros sonidos"
   },
   {
     "name": "Padawan Nivel 1",
-    "bitpoints_min": 180,
+    "bitpoints_min": 160,
     "bitpoints_max": 189,
     "image_url": "11-Padawan-N1-min.png",
     "descripcion": "Sabes utilizar los multiplexores, y ya manejas los servos de rotación contínua. Sabes como hacer tus primeros robots móviles"
   },
   {
     "name": "Padawan Nivel 2",
-    "bitpoints_min": 210,
+    "bitpoints_min": 190,
     "bitpoints_max": 219,
     "image_url": "12-Padawan-N2-min.png",
     "descripcion": "Ya tienes experiencia con sensores de IR. Has construido tus primeros robots reactivos con FPGA"
   },
   {
     "name": "Padawan Nivel 3",
-    "bitpoints_min": 240,
+    "bitpoints_min": 220,
     "bitpoints_max": 249,
     "image_url": "13-Padawan-N3-min.png",
     "descripcion": "Ya sabes manejar las tres pueras lógicas básicas, con las que puedes hacer cualquier circuito combinacional"
   },
   {
     "name": "Aspirante a Jedi",
-    "bitpoints_min": 270,
+    "bitpoints_min": 250,
     "bitpoints_max": 279,
     "image_url": "14-Aspirante-jedi-min.png",
     "descripcion": "Conoces los secretos de los circuitos paramétricos y el uso de las tablas de verdad para diseñar circuitos combinacionales"
   },
   {
     "name": "Aspirante a Jedi Nivel 1",
-    "bitpoints_min": 300,
+    "bitpoints_min": 280,
     "bitpoints_max": 309,
     "image_url": "15-Aspirante-jedi-N1-min.png",
     "descripcion": "Ya has pasado de usar bits aislados a números, que se transmiten por los Buses. Tu capacidad para crear circuitos complejos ha aumentado"
   },
   {
     "name": "Aspirante a Jedi Nivel 2",
-    "bitpoints_min": 330,
+    "bitpoints_min": 310,
     "bitpoints_max": 339,
     "image_url": "16-Aspirante-jedi-N2-min.png",
     "descripcion": "Conoces el secreto de la creación de bloques, y sabes diseñar circuitos combinacionales de cualquier número de entradas y salidas, a partir de sus tablas de verdad"
   },
   {
     "name": "Aspirante a Jedi Nivel 3",
-    "bitpoints_min": 360,
+    "bitpoints_min": 340,
     "bitpoints_max": 369,
     "image_url": "17-Aspirante-jedi-N3-min.png",
     "descripcion": "¡Ya sabes crear tus propias colecciones!"
   },
   {
     "name": "Jedi",
-    "bitpoints_min": 400,
+    "bitpoints_min": 370,
     "bitpoints_max": 409,
     "image_url": "18-Jedi-min.png",
     "descripcion": "Has descubierto el secreto de los biestables, y esto te abre el camino para aprender circuitos secuenciales. Tu poder de Jedi Hardware ha aumentado considerablemente..."
   },
   {
     "name": "Jedi Nivel 1",
-    "bitpoints_min": 440,
+    "bitpoints_min": 410,
     "bitpoints_max": 449,
     "image_url": "19-Jedi-N1-min.png",
     "descripcion": "Sabes medir el tiempo y contar eventos. Tus circuitos secuenciales aumentan en complejidad"
   },
   {
     "name": "Jedi Nivel 2",
-    "bitpoints_min": 480,
-    "bitpoints_max": 489,
+    "bitpoints_min": 450,
+    "bitpoints_max": 490,
     "image_url": "20-Jedi-N2-min.png",
     "descripcion": "Ya trabajas con datos. Conoces sus componentes fundamentales y sabes compararlos y almacenarlos"
   },
   {
     "name": "Jedi Nivel 3",
-    "bitpoints_min": 520,
+    "bitpoints_min": 491,
     "bitpoints_max": 529,
     "image_url": "21-Jedi-N3-min.png",
     "descripcion": "Sabes hacer circuitos con la capacidad de comunicarse con el PC y otros dispositivos, por medio de la transmisión serie"
   },
   {
     "name": "Caballero Jedi",
-    "bitpoints_min": 600,
+    "bitpoints_min": 530,
     "bitpoints_max": 609,
     "image_url": "22-Caballero-Jedi-min.png",
     "descripcion": "¡Has completado el curso de Electrónica Digital para makers con FPGAs libres! Eres capaz de hacer circuitos digitales de mediana complejidad. ¡Enhorabuena!"
