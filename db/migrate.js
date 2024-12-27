@@ -9,10 +9,13 @@ async function importData() {
     try {
         console.log("Importando base de datos inicial...");
 
+        let migratedData = true;
+
         const skillCount = await Skill.countDocuments();
         if (skillCount > 0) {
             console.log("La colección Skills ya contiene datos. Ignorando.");
         } else {
+            migratedData = false;
             console.log("Importando datos a la colección Skills...");
             const skillsData = JSON.parse(fs.readFileSync(path.join(__dirname, 'data/skills.json'), 'utf-8'));
 
@@ -32,6 +35,7 @@ async function importData() {
         if (badgeCount > 0) {
             console.log("La colección Badges ya contiene datos. Ignorando.");
         } else {
+            migratedData = false;
             console.log("Importando datos a la colección Badges...");
             const badgesData = JSON.parse(fs.readFileSync(path.join(__dirname, 'data/badges.json'), 'utf-8'));
             await Badge.insertMany(badgesData);
@@ -42,6 +46,7 @@ async function importData() {
         if (userCount > 0) {
             console.log("La colección Users ya contiene datos. Ignorando.");
         } else {
+            migratedData = false;
             console.log("Importando datos a la colección Users...");
             const usersData = JSON.parse(fs.readFileSync(path.join(__dirname, 'data/users.json'), 'utf-8'));
 
@@ -57,7 +62,11 @@ async function importData() {
             console.log(`Importados ${usersData.length} usuarios a la colección Users.`);
         }
 
-        console.log("Migración completada.");
+        if (!migratedData)
+            console.log("Migración completada.");
+        else
+            console.log("No se ha realizado ninguna migración.");
+
     } catch (error) {
         console.error("Error durante la migración:", error);
     }
