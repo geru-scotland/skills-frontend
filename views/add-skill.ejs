@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Skill</title>
+    <link rel="stylesheet" href="/css/forms.css">
+    <link rel="stylesheet" href="/css/buttons.css">
+</head>
+<body>
+<h1>Add New Skill to <%= skillTreeName %></h1>
+<p></p>
+<form action="/skills/<%= skillTreeName %>/add" method="POST">
+    <div class="form-group">
+        <label for="text">Skill Name:</label>
+        <input type="text" id="text" name="text" placeholder="Skill Name" required>
+    </div>
+    <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" placeholder="Describe the skill..." rows="3"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="tasks">Tasks (one per line):</label>
+        <textarea id="tasks" name="tasks" placeholder="Task 1\nTask 2\nTask 3" rows="5"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="resources">Resources (one per line, format: URL):</label>
+        <textarea id="resources" name="resources" placeholder="https://resource1.com\nhttps://resource2.com" rows="5"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="score">Score:</label>
+        <input type="number" id="score" name="score" value="1" min="1">
+    </div>
+    <div class="form-group">
+        <label for="icon">Icon URL:</label>
+        <input type="text" id="icon" name="icon" placeholder="Icon URL">
+    </div>
+    <button type="submit" class="btn-submit">Add Skill</button>
+</form>
+</body>
+</html>

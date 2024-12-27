@@ -1,0 +1,47 @@
+[
+  {
+    "username": "admin",
+    "password": "admin123",
+    "admin": true
+  },
+  {
+    "username": "mario",
+    "password": "test123",
+    "admin": false
+  },
+  {
+    "username": "link",
+    "password": "test123",
+    "admin": false
+  },
+  {
+    "username": "zelda",
+    "password": "test123",
+    "admin": false
+  },
+  {
+    "username": "kirby",
+    "password": "test123",
+    "admin": false
+  },
+  {
+    "username": "aloy",
+    "password": "test123",
+    "admin": false
+  },
+  {
+    "username": "geralt",
+    "password": "test123",
+    "admin": false
+  },
+  {
+    "username": "kratos",
+    "password": "test123",
+    "admin": false
+  },
+  {
+    "username": "lara",
+    "password": "test123",
+    "admin": false
+  }
+]

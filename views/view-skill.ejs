@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= skill.text %> - Detalles</title> <!-- Título dinámico basado en el nombre de la habilidad -->
+    <link rel="stylesheet" href="/css/skillTemplate.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script type="module" src="/js/skillTemplate.js"></script>
+    <script type="module" src="/js/confetti.js"></script>
+    <script>
+        window.currentUsername = "<%= currentUsername %>";
+        window.isAdmin = <%= JSON.stringify(isAdmin) %>;
+    </script>
+</head>
+<body>
+
+<div id="skillContainer" class="container">
+
+</div>
+</body>
+</html>
