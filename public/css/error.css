@@ -1,0 +1,58 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    color: #fff;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 600px;
+    padding: 30px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px); /* Efecto cristal */
+}
+
+h1 {
+    color: #ff6b6b; /* Rojo coral suave */
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra más tenue */
+}
+
+p {
+    font-size: 1.2em;
+    color: rgba(255, 255, 255, 0.8); /* Blanco translúcido */
+    margin-bottom: 20px;
+}
+
+a {
+    color: #50fa7b; /* Verde suave */
+    text-decoration: none;
+    font-weight: bold;
+    background: rgba(80, 250, 123, 0.2); /* Verde translúcido */
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+a:hover {
+    background: rgba(80, 250, 123, 0.4); /* Verde más intenso al pasar el ratón */
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+a:active {
+    background: rgba(80, 250, 123, 0.6); /* Verde más brillante al hacer clic */
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}

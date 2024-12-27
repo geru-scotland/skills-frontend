@@ -1,0 +1,15 @@
+<div class="navbar">
+    <div class="navbar-left">
+        <%- include('username-display') %>
+    </div>
+    <div class="navbar-right">
+        <a href="/skills/electronics">electronics (<%= totalSkills %>)</a>
+        <a href="">Score: <%= userScore %></a>
+        <a href="/users/leaderboard">Leaderboard</a>
+        <a href="/about">About</a>
+        <a href="/users/logout">Logout</a>
+        <% if (isAdmin) { %>
+            <a href="/admin/dashboard">Admin Dashboard</a>
+        <% } %>
+    </div>
+</div>

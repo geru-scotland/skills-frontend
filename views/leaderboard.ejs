@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leaderboard</title>
+  <link rel="stylesheet" href="/css/leaderboard.css">
+</head>
+<body>
+  <h1>Leaderboard</h1>
+
+  <% sortedBadges.forEach(badge => { %>
+    <div class="badge-section">
+      <div class="badge-header">
+        <img src="/badges/<%= badge.image_url %>" alt="<%= badge.name %>" class="badge-icon">
+        <h2><%= badge.name %></h2>
+      </div>
+      <p class="badge-description"><%= badge.description %></p>
+      
+      <% if (groupedUsers[badge.name] && groupedUsers[badge.name].length > 0) { %>
+        <ul class="user-list">
+          <% groupedUsers[badge.name].forEach(user => { %>
+            <li><%= user.username %> (Score: <%= user.score %>)</li>
+          <% }) %>
+        </ul>
+      <% } else { %>
+        <p class="no-users">No users for this badge yet.</p>
+      <% } %>
+    </div>
+    <hr>
+  <% }) %>
+
+  <!-- Tabla con todas las descripciones -->
+  <h2>Descripción de las Medallas</h2>
+  <table id="badge-descriptions-table">
+    <thead>
+      <tr>
+        <th>Imagen</th>
+        <th>Medalla</th>
+        
+        <th>Required Bitpoints</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% sortedBadges.forEach(badge => { %>
+        <tr>
+          <td>
+            <img src="/badges/<%= badge.image_url %>"class="badge-icon">
+          </td>
+          <td><%= badge.name %></td>
+          <td><%= badge.bitpoints_min %> - <%= badge.bitpoints_max %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</body>
+</html>
