@@ -383,7 +383,7 @@ h1 {
 }
 .icon-overlay i {
     font-size: 1.5em;
-    color: yellowgreen;
+    color: #a6f603;
 }
 .description {
     text-align: center;
@@ -442,7 +442,7 @@ footer {
 
 .navbar a:hover {
     color: #ffeb3b;
-    transform: scale(1.1); 
+    transform: scale(1.1);
 }
 
 .navbar-left {
