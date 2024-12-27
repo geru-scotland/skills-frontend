@@ -200,7 +200,26 @@ router.get('/:skillId/evidences', isAuthenticated, async (req, res) => {
             return res.status(404).json({ error: 'No se encontraron evidencias para esta habilidad.' });
         }
 
-        res.json(evidences);
+        const user = await User.findOne({ username: req.session.user.username });
+
+
+        const enrichedEvidences = evidences.map(evidence => {
+            const enrichedEvidence = evidence.toObject();
+            enrichedEvidence.verifiedByUser = false;
+
+            evidence.verifications.forEach(verification => {
+                if (verification.toString() === user._id.toString()) {
+                    enrichedEvidence.verifiedByUser = true;
+                }
+            });
+
+            return enrichedEvidence;
+        });
+
+        console.log(enrichedEvidences);
+
+        res.json(enrichedEvidences);
+
     } catch (error) {
         console.error('Error al obtener las evidencias:', error);
         res.status(500).json({ error: 'Error al obtener las evidencias' });

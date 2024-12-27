@@ -212,7 +212,9 @@ function renderEvidenceTable(skillId) {
             evidences.forEach(evidence => {
                 const row = document.createElement('tr');
 
-                const showVerifyButton = !window.isAdmin && evidence.user.username !== window.currentUsername;
+                const showVerifyButton = !window.isAdmin
+                    && evidence.user.username !== window.currentUsername
+                    && !evidence.verifiedByUser;
 
                 row.innerHTML = `
                     <td>${evidence.user.username || 'Unknown'}</td>
