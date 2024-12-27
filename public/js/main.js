@@ -41,7 +41,6 @@ function applyHexagonColors(skillsData) {
     });
 }
 
-
 function buildSkills(skillsData) {
     const svgContainer = document.querySelector('.svg-container');
     svgContainer.innerHTML = skillsData.map(skill => createSkillSVG(skill)).join('');
@@ -62,12 +61,12 @@ function createSkillSVG(skill) {
             </text>
             <image x="35%" y="60%" width="30" height="30" href="/electronics/icons/${skill.icon}" />
             ${unverifiedCount > 0 ? `
-                <circle cx="10" cy="10" r="10" fill="red"></circle>
-                <text x="10" y="15" text-anchor="middle" fill="white" font-size="10">${unverifiedCount}</text>
+                <circle cx="10" cy="20" r="10" fill="red"></circle>
+                <text x="10" y="23" text-anchor="middle" fill="white" font-size="10">${unverifiedCount}</text>
             ` : ''}
             ${verifiedCount > 0 ? `
-                <circle cx="90" cy="10" r="10" fill="green"></circle>
-                <text x="90" y="15" text-anchor="middle" fill="white" font-size="10">${verifiedCount}</text>
+                <circle cx="90" cy="20" r="10" fill="green"></circle>
+                <text x="90" y="23" text-anchor="middle" fill="white" font-size="10">${verifiedCount}</text>
             ` : ''}            
         </svg>
         <div class="icon-overlay">

@@ -1,41 +1,50 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Poppins', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f4f4f4;
-    color: #333;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    color: #fff;
 }
 .about-container {
     text-align: center;
-    background: #fff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    max-width: 400px;
 }
 .about-container h1 {
-    margin: 0 0 20px;
-    font-size: 24px;
-    color: #222;
+    margin-bottom: 20px;
+    font-size: 28px;
+    font-weight: 600;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 .about-container p {
     margin: 10px 0;
     font-size: 16px;
-    line-height: 1.6;
+    line-height: 1.8;
+    color: #f0f0f0;
 }
 .about-container a {
     display: inline-block;
     margin-top: 20px;
+    padding: 10px 20px;
     text-decoration: none;
-    color: #007BFF;
+    color: #2575fc;
     font-size: 16px;
-    font-weight: bold;
-    transition: color 0.3s ease;
+    font-weight: 600;
+    background: #fff;
+    border-radius: 25px;
+    transition: all 0.3s ease;
 }
 .about-container a:hover {
-    color: #0056b3;
+    background: #2575fc;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }

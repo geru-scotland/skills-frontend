@@ -137,5 +137,4 @@ const quotes = [
     "Nothing is true; everything is permitted. - Assassin's Creed (2007)"
 ];
 
-
 module.exports = importData;

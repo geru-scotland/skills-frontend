@@ -30,7 +30,6 @@ function getSkillById(skillId) {
         });
 }
 
-
 function getQueryParams() {
     const queryParams = new URLSearchParams(window.location.search);
     return {
@@ -160,7 +159,6 @@ function renderSkillTemplate() {
     });
 }
 
-
 function handleTaskChange(event) {
     const { id } = getQueryParams();
     const taskIndex = event.target.getAttribute('data-task-index');
@@ -238,7 +236,6 @@ function renderEvidenceTable(skillId) {
         });
 }
 
-
 function verifyEvidence(evidenceId) {
     const { id: skillId } = getQueryParams();
 
@@ -291,6 +288,7 @@ function rejectEvidence(evidenceId) {
             console.error('Error al rechazar la evidencia:', error);
         });
 }
+
 window.verifyEvidence = verifyEvidence;
 window.approveEvidence = approveEvidence;
 window.rejectEvidence = rejectEvidence;

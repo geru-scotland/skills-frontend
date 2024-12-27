@@ -1,6 +1,8 @@
-// ***************************************
-// Basics
-// ***************************************
+/**
+ * ==========================================
+ * Basics
+ * ==========================================
+ */
 console.log("Aplicación iniciada");
 const createError = require('http-errors');
 const express = require('express');
@@ -11,17 +13,21 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const importData = require('./db/migrate');
 
-// ***************************************
-// Rutas imports
-// ***************************************
+/**
+ * ==========================================
+ * Rutas imports
+ * ==========================================
+ */
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const skillsRouter = require('./routes/skills');
 const adminRouter = require('./routes/admin');
 
-// ***************************************
-// Config app Express
-// ***************************************
+/**
+ * ==========================================
+ * Configuración de app Express
+ * ==========================================
+ */
 const port = process.env.PORT || 3001;
 const app = express();
 
@@ -41,41 +47,45 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ***************************************
-// Rutas
-// ***************************************
+/**
+ * ==========================================
+ * Rutas princpales definición
+ * ==========================================
+ */
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/skills', skillsRouter);
 app.use('/admin', adminRouter);
 
-// ***************************************
-// MongoDB
-// ***************************************
-
-function dbBootstrap(){
+/**
+ * ==========================================
+ * MongoDB + migración
+ * ==========================================
+ */
+function dbBootstrap() {
     const promise = new Promise(async (resolve, reject) => {
         try {
             console.log('Conectando a MongoDB...');
             await mongoose.connect('mongodb://localhost:27017/skills-db');
             console.log('Conexión establecida con MongoDB: skills-db');
 
-            console.log('Migrando datos...')
+            console.log('Migrando datos...');
             await importData();
             resolve();
         } catch (error) {
             console.error('Error conectando a MongoDB:', error);
             reject(error);
-        }})
+        }
+    });
 
     return promise;
 }
 
-
-// ***************************************
-// Server init
-// ***************************************
-
+/**
+ * ==========================================
+ * Server init
+ * ==========================================
+ */
 dbBootstrap()
     .then(() => {
         app.listen(port, () => {
@@ -86,11 +96,11 @@ dbBootstrap()
         console.error('Error iniciando la aplicación:', error);
     });
 
-
-// ***************************************
-// Error handling
-// ***************************************
-
+/**
+ * ==========================================
+ * Gestión de errores
+ * ==========================================
+ */
 app.use((req, res, next) => {
     const error = new Error("Page not found.");
     error.status = 404;
@@ -102,7 +112,7 @@ app.use((err, req, res, next) => {
     res.render('error', {
         error: {
             status: err.status || 500,
-            message: err.message || "Internal server error.",
+            message: err.message || "Internal server error."
         },
     });
 });
